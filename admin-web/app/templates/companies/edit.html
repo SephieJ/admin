@@ -1,0 +1,490 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Company</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" id="edit_company" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ company_form.csrf_token }}
+
+                <div class="col-lg-2">
+                  <div class="profile-info">
+                    <a href="#" id="imgclick">
+                      <div class="profile-avatar">
+                        <label class="settings-profile-avatar" >
+                          {% if company_details.image_url %}
+                            <img id="profilepic" src="{{ company_details.image_url }}" alt="" class="center-block img-rounded" width="100">
+                          {% else %}
+                            <img id="profilepic" src="{{ url_for('static', filename='assets/img/building.png') }}" width="100" alt="" class="center-block img-rounded">
+                          {% endif %}
+                          <div class="profile-avatar-link">
+                              <i class="fa fa-camera" aria-hidden="true"></i>
+                          </div>
+                        </label>
+                      </div>
+                    </a>
+                    {{ company_form.image_url(id="imgupload", class="form-control", style="display:none;") }}
+                    <div class="text-center small"><em>maximum of 2MB.</em></div>
+                    <div class="text-center small"><em>Available formats (.JPG, .JPEG, .PNG)</em></div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <h4>{{ company_details.name|safe }}</h4>
+                  <div class="text-muted">
+                    Joined {{ company_details.created_date.strftime('%b %Y') }}
+                  </div>
+                  <div class="text-muted email">
+
+                  </div>
+                </div>
+                  <div class="col-lg-9" style="margin-top: 20px;">
+                      <div class="col-md-12">
+                          <h5><b>Company Profile</b></h5>
+
+                          <div class="form-group">
+                            <span>Bio / Company Information</span>
+                              {% if company_details.company_info %}
+                              {{ company_form.company_info(class="form-control", placeholder="Tell us something about your company", maxlength="250", rows="7", cols="30") }}
+                              {% else %}
+                                {{ company_form.company_info(class="form-control", placeholder="Tell us something about your company", maxlength="250", rows="7", cols="30") }}
+                              {% endif %}
+
+                              <div class="help-block with-errors"></div>
+                                {% if company_form.company_info.errors %}
+                                    {% for error in company_form.company_info.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                          </div>
+
+                          <div>
+                            {% with messages = get_flashed_messages(category_filter=['profile']) %}
+                            <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                            {% if messages %}
+                              {% for message in messages %}
+                                  {% set msg = message.split(';') %}
+                                  <div class="alert alert-flash alert-{{ msg[1] }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <!-- <strong>Title</strong> --> {{ msg[0] }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                          </div>
+
+                          <div class="row" style="padding-bottom: 20px;">
+                            <div class="col-sm-6">
+                              <h5><b>Profile</b></h5>
+
+                              <div class="form-group">
+                                <span>Company Name</span>
+                                {{ company_form.name(class="form-control", value=company_details.name) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.name.errors %}
+                                      {% for error in company_form.name.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Business Register No.</span>
+                                {{ company_form.business_reg_number(class="form-control", value=company_details.business_reg_number, readonly="true") }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.business_reg_number.errors %}
+                                      {% for error in company_form.business_reg_number.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Office Number</span>
+                                {% if company_details.office_number %}
+                                  {{ company_form.office_number(class="form-control", value=company_details.office_number, maxlength="8", type="number", size="8") }}
+                                {% else %}
+                                  {{ company_form.office_number(class="form-control", placeholder="Office Number", maxlength="8", type="number", size="8") }}
+                                {% endif %}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.office_number.errors %}
+                                      {% for error in company_form.office_number.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <h5><b>Website & Social Media Page</b></h5>
+                              <div class="form-group">
+                                <span>Website</span>
+                                {{ company_form.website(class="form-control", value=company_details.website) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.website.errors %}
+                                      {% for error in company_form.website.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Facebook</span>
+                                {{ company_form.facebook(class="form-control", value=company_details.facebook) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.facebook.errors %}
+                                      {% for error in company_form.facebook.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>LinkedIn</span>
+                                {{ company_form.linkedin(class="form-control", value=company_details.linkedin) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.linkedin.errors %}
+                                      {% for error in company_form.linkedin.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <h5><b>Company Address</b></h5>
+
+                              {% if company_details.address %}
+
+                              <div class="form-group">
+                                <span>Block Street</span>
+                                {{ company_form.block_street(class="form-control", value=company_details.address.block_street) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.block_street.errors %}
+                                      {% for error in company_form.block_street.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Postal Code</span>
+                                {{ company_form.postal_code(class="form-control", value=company_details.address.postal_code) }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.postal_code.errors %}
+                                      {% for error in company_form.postal_code.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              {% else %}
+
+                              <div class="form-group">
+                                <span>Block Street</span>
+                                {{ company_form.block_street(class="form-control", value="Block Street") }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.block_street.errors %}
+                                      {% for error in company_form.block_street.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Postal Code</span>
+                                {{ company_form.postal_code(class="form-control", value="Postal Code") }}
+                                <div class="help-block with-errors"></div>
+                                  {% if company_form.postal_code.errors %}
+                                      {% for error in company_form.postal_code.errors %}
+                                          <span class="help-block">{{ error }}</span>
+                                      {% endfor %}
+                                  {% endif %}
+                              </div>
+
+                              {% endif %}
+
+                            </div>
+
+                            <div class="col-sm-5 col-sm-offset-1">
+
+                              <h5><b>Company Information</b></h5>
+
+                              <div class="form-group">
+                                <span>Select Industry:</span>
+                                  {{ company_form.industry(multiple="multiple", placeholder=company_details.primaryIndustry, style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.industry.errors %}
+                                        {% for error in company_form.industry.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Company Size (Employees):</span>
+                                  {{ company_form.company_size(multiple="multiple", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.company_size.errors %}
+                                        {% for error in company_form.company_size.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Company Size (Revenue):</span>
+                                  {{ company_form.company_revenue(multiple="multiple", class="select2", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.company_revenue.errors %}
+                                        {% for error in company_form.company_revenue.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>Year of Incorporation:</span>
+                                  {{ company_form.company_years(multiple="multiple", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.company_years.errors %}
+                                        {% for error in company_form.company_years.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+
+                              <h5><b>Accreditation</b></h5>
+
+                              <div class="form-group">
+                                <span>BCA:</span>
+                                  {{ company_form.bca(multiple="multiple", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.bca.errors %}
+                                        {% for error in company_form.bca.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>ISO:</span>
+                                  {{ company_form.iso(multiple="multiple", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.iso.errors %}
+                                        {% for error in company_form.iso.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group">
+                                <span>BizSafe:</span>
+                                  {{ company_form.bizsafe(multiple="multiple", placeholder="Select Value", style="width:100%;") }}
+                                  <div class="help-block with-errors"></div>
+                                    {% if company_form.bizsafe.errors %}
+                                        {% for error in company_form.bizsafe.errors %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                              </div>
+
+                              <div class="form-group" aria-describedby="submit-tooltip">
+                                <button class="btn btn-primary pull-right" type="submit">Save</button>
+                              </div>
+
+                            </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}\
+{% block javascript %}
+<script src="{{ url_for('static', filename='assets/js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery.validate.min.js') }}"></script>
+<script type="text/javascript">
+  // $('#imgclick').click(function() {
+  //   $('#imgupload').trigger('click');
+  // });
+</script>
+<script>
+  $(function(){
+    var profileImageURL;
+    var url_image = window.URL || window.webkitURL;
+    var image_container = document.getElementById('profilepic');
+
+    $(document).on('change', '#imgupload', function(){
+      var import_image = this;
+      import_image_profile(import_image);
+    });
+
+    function import_image_profile(source) {
+
+        var file_types = ['png','jpg','jpeg'];
+        var file_type_ctr = 0;
+
+        var files = source.files;
+        var file;
+        if (files && files.length) {
+          file = files[0];
+
+          for(var type in file_types){
+              if(file_types[type] === file.type.replace("image/","")){
+                  file_type_ctr += 1;
+              }
+          }
+
+          if(file_type_ctr == 0){
+              window.alert('Invalid file format');
+              return;
+          }
+
+          if (/^image\/\w+/.test(file.type)) {
+
+            var size = files[0].size;
+            var max_size = 2000000;
+            if (size > max_size) {
+              window.alert("Maximum file size exceeds");
+              source.value = null;
+              return;
+            } else {
+              image_container.src = profileImageURL = url_image.createObjectURL(file);
+            }
+
+
+          } else {
+            window.alert('Please choose an image file.');
+          }
+        }
+    }
+
+  });
+</script>
+<script>
+  $('#company_size').val("{{company_details.company_size}}");
+  $('#industry').val("{{company_details.industry}}");
+  $('#company_revenue').val("{{company_details.company_revenue}}");
+  $('#company_years').val("{{company_details.years_of_incorporation}}");
+  $('#bizsafe').val("{{company_details.bizsafe}}");
+  $('#industry').selectize({
+    maxItems: 1,
+    persist: true,
+    sortField: 'text'
+  });
+
+  $('#company_size').selectize({
+    maxItems: 1,
+    persist: true,
+
+  });
+
+  $('#company_revenue').selectize({
+    maxItems: 1,
+    persist: true,
+  })
+
+  $('#company_years').selectize({
+    maxItems: 1,
+    persist: true,
+  })
+
+  $('#iso').selectize({
+      plugins: ['remove_button', 'restore_on_backspace'],
+      delimiter: ',',
+      persist: false,
+      create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+      },
+      onChange: function(value) {
+        console.log(value);
+        if(value !== "") {
+          $("#iso-error").hide();
+        } else {
+          $("#iso-error").show();
+        }
+      }
+    });
+    // populate iso field
+    var selected_categories = {{ company_details.iso|tojson }}
+    for (var iso in selected_categories) {
+     $('#iso')[0 ].selectize.addItem(selected_categories[iso]);
+    }
+
+
+  $('#bizsafe').selectize({
+    maxItems: 1,
+    persist: true,
+  })
+
+  $('#bca').selectize({
+      plugins: ['remove_button', 'restore_on_backspace'],
+      delimiter: ',',
+      persist: false,
+      create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+      },
+      onChange: function(value) {
+        console.log(value);
+        if(value !== "") {
+          $("#bca-error").hide();
+        } else {
+          $("#bca-error").show();
+        }
+      }
+    });
+  // populate bca field
+  var selected_categories = {{ company_details.bca|tojson }}
+  for (var bca in selected_categories) {
+   $('#bca')[0].selectize.addItem(selected_categories[bca]);
+  }
+// alert("{{company_details.company_size}}");
+// $('#company_size').val("{{company_details.company_size}}").trigger('change');
+</script>
+
+{# Validate Edit Company #}
+<script>
+
+  $("#edit_company").validate({
+    rules: {
+      name: "required"
+    },
+    messages: {
+      name: "Company name is required."
+    },
+    errorElement: "span",
+    errorPlacement: function(error, element) {
+      // Add the `help-block` class to the error element
+      error.addClass("help-block has-error");
+      if (element.prop("type") === "checkbox") {
+        error.insertAfter(element.parent("label"));
+      } else {
+        error.insertAfter(element);
+      }
+    },
+    highlight: function(element, errorClass, validClass ) {
+      $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
+    },
+    unhighlight: function(element, errorClass, validClass) {
+      $(element).parents(".form-group").removeClass("has-error");
+    }
+  });
+
+
+</script>
+{% endblock %}

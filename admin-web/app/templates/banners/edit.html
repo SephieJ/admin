@@ -1,0 +1,66 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Banner</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ banners_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ banners_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ banners_form.name(class="form-control", placeholder="Banner Type", value=banner.name) }}
+
+                            <div class="help-block with-errors"></div>
+                            {% if banners_form.name.errors %}
+                                {% for error in banners_form.name.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ banners_form.description.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ banners_form.description(class="form-control", placeholder="Banner Description", value=banner.description) }}
+
+                            <div class="help-block with-errors"></div>
+                            {% if banners_form.description.errors %}
+                                {% for error in banners_form.description.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <a href="{{ url_for ('.update_banner_page', banner_id=banner.id)  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+
+                    <a class="btn btn-default" href="{{ url_for('.view_banner_page', banner_id=banner.id) }}" id="btnDefault">Back</a>&nbsp;&nbsp;&nbsp;
+
+                    <a href="{{ url_for ('.banner_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

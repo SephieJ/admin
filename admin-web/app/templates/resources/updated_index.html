@@ -1,0 +1,74 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+          <h2 class="pull-left">Updated Resource List</h2>
+        </div>
+        <!-- /.box-header -->
+        {% if updates != "" %}
+        {% if updates|count > 0 %}
+
+        <div class="box-body">
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <!-- <th>DATE POSTED</th> -->
+                <th>DATE UPDATED</th>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>STATUS</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            {% for update in updates %}
+              {% if update.has_update %}
+              <tr>
+                {# <td>{{ update.created_date.strftime('%d-%m-%Y') }}</td> #}
+                <td>{{ update.updated_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ update.id }}</td>
+                <td><a href="{{ url_for('.view_update_page', update_id=update.id) }}">{{ update.name }} </a></td>
+                {% if update.status == "ACTIVE" %}
+                  <td class="pending">EDITED</td>
+                {% elif update.status == "BANNED2" %}
+                  <td class="banned">BANNED</td>
+                {% elif update.status == "REJECTED" %}
+                  <td class="rejected">REJECTED</td>
+                {% else %}
+                  <td class="pending">PENDING</td>
+                {% endif%}
+              </tr>
+              {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {% if updates|count == 0 %}
+          <h3 class="text-center alert alert-info">No Record(s) Found!</h3>
+          {% endif %}
+        {% endif %}
+        {% endif %}
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,56 @@
+.category {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #EFB509;
+    border-radius: 5px;
+    padding: 3px;
+}
+.subcategory {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #CD7213;
+    border-radius: 5px;
+    padding: 3px;
+}
+a.edit:link {
+    color: #FFC300;
+}
+a.edit:visited {
+    color: #FFC300;
+    text-decoration: none;
+}
+a.edit:hover {
+    text-decoration: underline;
+}
+a.edit:hover i {
+    transform: scale(2);
+}
+a.view:link {
+    color: #0776EB;
+    text-decoration: none;
+}
+a.view:visited {
+    color: #0776EB;
+    text-decoration: none;
+}
+a.view:hover {
+    text-decoration: underline;
+}
+a.view:hover i {
+    transform: scale(2);
+}
+a.delete:link {
+    color: #EB0707;
+}
+a.delete:visited {
+    color: #EB0707;
+    text-decoration: none;
+}
+a.delete:hover {
+    text-decoration: underline;
+}
+a.delete:hover i {
+    transform: scale(2);
+}

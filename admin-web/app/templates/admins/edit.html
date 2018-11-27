@@ -1,0 +1,157 @@
+{% extends "layouts/master_layout.html" %}
+{% block css_block %}
+<link href="{{ url_for('static', filename='assets/plugins/datepicker/datepicker3.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+{% block body %}
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Admin</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ admin_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.roles.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.roles(class="form-control", placeholder="Roles", value=admin.roles) }}
+                            <div class="help-block with-errors danger"></div>
+                            {% if admin_form.roles.errors %}
+                                {% for error in admin_form.roles.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.first_name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.first_name(class="form-control", placeholder="First Name", value=admin.first_name) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.first_name.errors %}
+                                {% for error in admin_form.first_name.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.last_name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.last_name(class="form-control", placeholder="Last Name", value=admin.last_name) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.last_name.errors %}
+                                {% for error in admin_form.last_name.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.landline_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.landline_number(class="form-control", placeholder="Landline Number", value=admin.landline_number) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.landline_number.errors %}
+                                {% for error in admin_form.landline_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.mobile_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.mobile_number(class="form-control", placeholder="Mobile Number", value=admin.mobile_number) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.mobile_number.errors %}
+                                {% for error in admin_form.mobile_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.designation.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.designation(class="form-control", placeholder="Designation", value=admin.designation) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.designation.errors %}
+                                {% for error in admin_form.designation.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.email.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.email(class="form-control", placeholder="Email Address", value=admin.email) }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.email.errors %}
+                                {% for error in admin_form.email.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-12">
+                    <div class="form-group text-left">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Image:</label>
+                            <div class="enlarge col-sm-5">
+                            <a href="#" id="imgclick"><div class="profile-avatar">
+                              <label class="settings-profile-avatar" >
+                                {% if admin.image_url %}
+                                  <img id="profilepic" name="image" src="{{ admin.image_url }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                                {% else %}
+                                  <img id="profilepic" src="{{ url_for('static', filename='uploads/no-image.png') }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                                {% endif %}
+                                <div class="profile-avatar-link">
+                                    <i class="fa fa-camera" aria-hidden="true"></i> Upload Picture
+                                    {{ admin_form.image(id="imgupload", class="form-control", style="display:none",  onchange="document.getElementById('profilepic').src = window.URL.createObjectURL(this.files[0])") }}
+                                </div>
+                              </label>
+                            </div></a>
+                
+                            </div>
+                    </div>
+                </div> -->
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ url_for ('.admin_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

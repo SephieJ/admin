@@ -1,0 +1,48 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Add FAQ</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ faqs_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ faqs_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{faqs_form.name(class="form-control", placeholder="FAQ Type") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ faqs_form.description.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{faqs_form.description(class="form-control", placeholder="FAQ Description") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ url_for ('.add_faq_page')  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+                    <a href="{{ url_for ('.faq_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}
+

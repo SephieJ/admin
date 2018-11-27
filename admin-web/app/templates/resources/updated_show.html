@@ -1,0 +1,129 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+  <div class="nav-tabs-custom">
+    <div class="tab-content primary">
+      <div class="active tab-pane primary" id="activity">
+        <!-- Post -->
+        <div class="post">
+          <span class="username">
+          <h3> {{ update.name }} </h3>
+          {% if update.status == 'BANNED' %}
+          <span class="label label-danger text-center">BANNED</span>
+          {% endif %}
+          </span>
+        </div>
+          <div class="row margin-bottom">
+            <div class="col-sm-6">
+              <div class="box-body">
+              <form id="userForm" method="POST" class="form-horizontal">
+                {{ update_form.csrf_token }}
+                <strong><i class="fa fa-calendar-check-o margin-r-5"></i> Date Posted</strong>
+
+                <p class="text-muted">
+                    {{ update.created_date.strftime('%Y-%m-%d')}}
+                </p>
+                <hr>
+
+                <strong><i class="fa fa-address-card margin-r-5"></i> Posted By</strong>
+                <p class="text-muted">
+                    {{ update.account.last_name }} {{ update.account.first_name }}
+                    &nbsp;
+                    {% if update.account.status == 'ACTIVATED' %}
+                      <span class="label label-success text-center">ACTIVE</span>
+                      {% elif update.account.status == 'BANNED' %}
+                      <span class="label label-danger text-center">BANNED</span>
+                      {% elif update.account.status == 'DEACTIVATED' %}
+                      <span class="label label-warning text-center">DEACTIVATED</span>
+                    {% endif %}
+                </p>
+                <p class="text-muted">{{ update.account.email }}</p>
+                {% if update.account.mobile_number or update.account.landline_number %}
+                <p class="text-muted">{{ update.account.mobile_number }}</p>
+                <p class="text-muted">{{ update.account.landline_number }}</p>
+                {% else %}
+                <p class="text-muted">*No contact number found.</p>
+                {% endif %}
+                <hr>
+
+                <strong><i class="fa fa-money margin-r-5"></i> Price</strong>
+                <p class="text-muted">
+                    S$ {{ update.price }}
+                </p>
+
+                <strong><i class="fa fa-clock-o margin-r-5"></i> Rate</strong>
+                <p class="text-muted">
+                    Per {{ update.resource_rate }}
+                </p>
+                <hr>
+
+                <button type="submit" id="restore" name="submit" value="restore" formaction="{{ url_for('.accept_update', update_id=update.id) }}" class="btn btn-m btn-success"><b>ACCEPT</b></button>&nbsp;&nbsp;&nbsp;
+
+                <button type="submit" id="restore" name="submit" value="restore" formaction="{{ url_for('.reject_update', update_id=update.id) }}" class="btn btn-m btn-danger"><b>REJECT</b></button>&nbsp;&nbsp;&nbsp;
+
+                <a class="btn btn-default" href="{{ url_for('.update_page', update_id=update.id) }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i> Back to List</a>
+
+              </form>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="row">
+
+                {% for image in update.images %}
+
+                  <div class= "col-sm-3">
+                    <ul class="products-list product-list-in-box">
+                      <li class="item">
+                        {% if update.images %}
+                          <img src="{{ image.image }}" alt="Product Image" height = "150" width="150">
+                        {% else %}
+                          <img src="{{ url_for('static', filename='uploads/no-image.png') }}" alt="Product Image" height="150" width="150">
+                        {% endif%}
+                      </li>
+                    </ul>
+                  </div>
+
+                {% endfor %}
+
+
+             </div>
+            </div>
+
+            <br>
+
+            <div class= "col=sm-6">
+              <strong><i class="fa fa-info-circle margin-r-5"></i> Description</strong>
+              <p class="text-muted">
+                {{ update.description }}
+              </p>
+
+              <strong><i class="fa fa-object-group margin-r-5"></i> Category / Subcategory</strong>
+              <br>
+                {% for category in update.categories %}
+                 <p>
+                 <span class="category text-center">{{ category.main_category_name }}</span>
+                 <span class="subcategory text-center">{{ category.subcategory['name'] }}</span>
+                 </p>
+               {% endfor %}
+
+               <br>
+               <strong><i class="fa fa-wordpress margin-r-5"></i> KEYWORDS:</strong>
+               <br>
+                {% for category in update.categories %}
+                <p>
+                  <input id="keywords" value="{{ category.keywords }}" />
+                  <!-- <span class="category text-center">{{ category.keywords }}</span> -->
+                </p>
+                {% endfor %}
+
+            </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+{% endblock %}
+{% endblock %}

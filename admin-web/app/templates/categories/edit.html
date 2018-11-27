@@ -1,0 +1,94 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<style type="text/css">
+a:hover {
+text-decoration: underline;
+}
+</style>
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+            <h2 class="pull-left">{{ category.name }}</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ category_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ category_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ category_form.name(class="form-control", placeholder="Category Name", value=category.name) }}
+                            <div class="help-block with-errors"></div>
+                                {% if category_form.name.errors %}
+                                    {% for error in category_form.name.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ category_form.description.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ category_form.description(class="form-control", placeholder="Category Description", rows="3", height="5") }}
+                            <div class="help-block with-errors"></div>
+                                {% if category_form.description.errors %}
+                                    {% for error in category_form.description.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+<!--                 <div class="col-md-12">
+    <div class="form-group text-left">
+            <div class="enlarge col-sm-5">
+            <a href="#" id="imgclick"><div class="profile-avatar">
+              <label class="settings-profile-avatar" >
+                {% if category.image_url %}
+                  <img id="profilepic" src="{{ category.image_url }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                
+                {% else %}
+                  <img id="profilepic" src="{{ url_for('static', filename='uploads/no-image.png') }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                {% endif %}
+                <div class="profile-avatar-link">
+                    <i class="fa fa-camera" aria-hidden="true"></i> Upload Picture
+                </div>
+              </label>
+            </div></a>
+            {{ category_form.image(id="imgupload", class="form-control", style="display:none",  onchange="document.getElementById('profilepic').src = window.URL.createObjectURL(this.files[0])") }}
+            </div>
+    </div>
+</div> -->
+
+                <div class="col-md-12 well well-sm">
+                    <div class="row row-bottom-margin">
+                        <div class="pull-left">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary"> Update</button>&nbsp;&nbsp;&nbsp;
+
+                        <a class="btn btn-default" href="{{ url_for('.view_category_page', category_id=category.id) }}" id="btnDefault">Back</a>&nbsp;&nbsp;&nbsp;
+
+                        <a class="btn btn-default" href="{{ url_for('.category_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}
+
+

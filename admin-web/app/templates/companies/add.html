@@ -1,0 +1,212 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+        <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+          <h2 class="pull-left">Add Company</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ company_form.csrf_token }}
+
+                  <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.name(class="form-control", placeholder="Company Name") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.name.errors %}
+                                {% for error in company_form.name.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.company_info.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.company_info(class="form-control", placeholder="Company Information") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.company_info.errors %}
+                                {% for error in company_form.company_info.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.business_reg_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.business_reg_number(class="form-control", placeholder="Businesss Reg Number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.business_reg_number.errors %}
+                                {% for error in company_form.business_reg_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.office_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.office_number(class="form-control", placeholder="Office Number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.office_number.errors %}
+                                {% for error in company_form.office_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.mobile_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.mobile_number(class="form-control", placeholder="Mobile Number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.mobile_number.errors %}
+                                {% for error in company_form.mobile_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.accreditations.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.accreditations(class="form-control", placeholder="Accreditations") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.accreditations.errors %}
+                                {% for error in company_form.accreditations.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-labels no-padding-right col-sm-2"><i> Company Address</i></label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.latitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.latitude(class="form-control", placeholder="Latitude") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.latitude.errors %}
+                                {% for error in company_form.latitude.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.longitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.longitude(class="form-control", placeholder="Longitude") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.longitude.errors %}
+                                {% for error in company_form.longitude.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.block_street.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.block_street(class="form-control", placeholder="Block street") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.block_street.errors %}
+                                {% for error in company_form.block_street.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.unit_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.unit_number(class="form-control", placeholder="Unit number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.unit_number.errors %}
+                                {% for error in company_form.unit_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.postal_code.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{company_form.postal_code(class="form-control", placeholder="Postal code") }}
+                            <div class="help-block with-errors"></div>
+                            {% if company_form.postal_code.errors %}
+                                {% for error in company_form.postal_code.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <a href="{{ url_for ('.add_company_page')  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+                    <a href="{{ url_for ('.company_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

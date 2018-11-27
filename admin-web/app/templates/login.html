@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>R2S - Administrator Login</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ url_for('static', filename='assets/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='assets/app/css/login.css') }}" rel="stylesheet">
+  </head>
+  <body background="{{ url_for('static', filename='assets/admin-lte/img/boxed-bg.png') }}">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="account-wall">
+          <img class="profile-img" src="{{ url_for('static', filename='assets/app/img/logo.png') }}" alt="">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} col-md-10 col-md-offset-1" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <form class="form-signin" method="POST" action="{{ url_for('HomeBP.login') }}">
+            {{ login_form.csrf_token }}
+            <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- jQuery 2.2.3 -->
+    <script src="{{ url_for('static', filename='assets/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Add Sub-Category</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ subcategory_form.csrf_token }}
+
+               <div class="col-md-12">
+                   <div class="form-group">
+                       <label for="name" class="col-sm-2  no-padding-right control-labels">Category:</label>
+                           <div class="col-sm-5">
+                               <label id="user-id">{{ category.name }}</label>
+                           </div>
+                   </div>
+               </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ subcategory_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{subcategory_form.name(class="form-control", placeholder="SubCategory Type") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ subcategory_form.description.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{subcategory_form.description(class="form-control", placeholder="SubCategory Description") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ url_for ('.add_subcategory_page', category_id=category.id)  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+                    <a href="{{ url_for ('.category_page', category_id=category.id) }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

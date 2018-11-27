@@ -1,0 +1,163 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+    <form method="POST" class="form-horizontal">
+      {{ wishlist_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            <h2 class="pull-left">{{ wishlist.name }}</h2>
+            <br>
+            <div class="action-buttons pull-right">
+                {% if wishlist.status == 'PENDING' %}
+                    <button class="btn btn-warning" formaction="{{ url_for('.edit_wishlist_page', wishlist_id=wishlist.id) }}"><i class="ace-icon fa fa fa-pencil-square bigger-140"></i> EDIT</a></button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-success" formaction="{{ url_for('.accept_wishlist', wishlist_id=wishlist.id) }}"><i class="ace-icon fa fa fa-check-square bigger-140"></i> ACCEPT</a></button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-danger" formaction="{{ url_for('.reject_wishlist', wishlist_id=wishlist.id) }}"><i class="ace-icon fa fa fa-times-rectangle bigger-140"></i> REJECT</a></button>&nbsp;&nbsp;&nbsp;
+
+                {% elif wishlist.status == 'ACTIVE' %}
+                    {# <button class="btn btn-danger" formaction="{{ url_for('.delete_wishlist_page', wishlist_id=wishlist.id) }}"><i class="ace-icon fa fa fa-archive bigger-140"></i> DELETE WISHLIST</a> #}
+                    <a class="btn btn-danger" href="{{ url_for('.delete_wishlist_page', wishlist_id=wishlist.id) }}"><i class="ace-icon fa fa fa-archive bigger-140"></i> DELETE WISHLIST</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                            <div class="col-sm-5">
+                                <label id="date-added">{{ wishlist.created_date.strftime('%d-%m-%Y') }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">ID:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ wishlist.id }}</label>
+                            </div>
+                    </div>
+                </div>
+    
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2  no-padding-right control-labels">Wishlist Name:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ wishlist.name }}</label>
+                            </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="description" class="col-sm-2  no-padding-right control-labels">Description:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ wishlist.description }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Status:</label>
+                            <div class="col-sm-5">
+                                {% if wishlist.status == 'ACTIVE' %}
+                                    <label id="user-id">WISHLISTED</label>
+                                {% elif wishlist.status == 'PENDING' %}
+                                    <label id="user-id">PENDING</label>
+                                {% else %}
+                                    <label id="user-id">REJECTED</label>
+                                {% endif %}
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-labels no-padding-right col-sm-2"><i> Categories: </i></label>
+                    </div>
+                </div>
+
+                {% for category in wishlist.categories %}
+
+               <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Main Category Name:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ category.main_category_name }}</label>
+                            </div>
+                    </div>
+                </div>
+               
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Main Category ID:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ category.main_category_id }}</label>
+                            </div>
+                    </div>
+                </div>
+               
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Sub Category Name:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ category.subcategory['name'] }}</label>
+                            </div>
+                    </div>
+                </div>
+               
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Sub Category Description:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ category.subcategory['description'] }}</label>
+                            </div>
+                    </div>
+                </div>
+               
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Sub Category ID:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ category.subcategory['id'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+                
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Status:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ wishlist.status }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                      <div class="pull-left">
+                        <a class="btn btn-default" href="{{ url_for('.wishlist_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a>
+                      </div>
+                  </div>
+                </div>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+    </form>
+</div>
+{% endblock %}
+{% endblock %}
+
+

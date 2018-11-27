@@ -1,0 +1,120 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+          <h2 class="pull-left">Support Ticket Requests</h2>
+        </div>
+
+        <div class="box-body">
+          <div class="btn-group">
+            <button type="button" onclick="Tickets.aWidgets.Tickets.filterTable('')" class="btn btn-default">All </button>
+            <button type="button" onclick="Tickets.aWidgets.Tickets.filterTable('PENDING')" class="btn btn-default">Pending <span class="badge bg-red" name="pending"></span></button>
+            <button type="button" onclick="Tickets.aWidgets.Tickets.filterTable('ONGOING')" class="btn btn-default">Ongoing <span class="badge bg-yellow" name="ongoing"></span></button>
+            <button type="button" onclick="Tickets.aWidgets.Tickets.filterTable('CLOSED')" class="btn btn-default">Close <span class="badge bg-green" name="closed"></span></button>
+          </div>
+          <br>
+          <br>
+          <table id="TicketsDataTable" class="table table-striped table-bordered" cellspacing="0" width="100%"></table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+
+  <div name="Tickets" path="Tickets/Tickets" class="modal fade DataTableModal" role="dialog">
+  	<div class="modal-dialog modal-lg">
+  		<div class="modal-content">
+  			<div class="modal-header">
+  				<button type="button" class="close"  data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+  				<h4 class="modal-title"><span></span> Tickets</h4>
+  			</div>
+  			<div class="modal-body">
+          <div class="row">
+              <div class="col-md-7">
+                <input name="id" type="hidden">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                  <div class="col-sm-6">
+                    <label class="control-label"><i class="fa"></i>Status</label>
+                    <select name="status" class="form-control select2 fa" style="width:100%">
+                        <option value="">--SELECT OPTION--</option>
+                      <option value="ONGOING">ACCEPT</option>
+                      <option value="CLOSED">CLOSED</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-6">
+                      <label class="control-label"><i class="fa"></i> Ticket #</label>
+                      <input name="reference_code" disabled  class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="control-label"><i class="fa"></i> Issuer</label>
+                      <input name="issuer_name" disabled class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-12">
+                      <label class="control-label"><i class="fa"></i>Subject</label>
+                      <input name="subject" disabled  class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-12">
+                      <label class="control-label"><i class="fa"></i>Description</label>
+                      <textarea name="message" disabled  class="form-control" type="text"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-12 solutions">
+                      <label class="control-label"><i class="fa"></i>Solutions</label>
+                      <textarea name="solution" rows="5"  class="form-control" type="text"></textarea>
+                      <span class="help-block"></span>
+                  </div>
+                </div>
+
+                <div class="row">
+
+                  <div class="col-md-12" style="margin-top:20px;">
+                      <hr>
+            				<button action="cancel" type="button" class="btn btn-default full-right" data-dismiss="modal">Cancel</button>
+            				<button name="save" action="save" type="button" class="btn btn-primary full-right">Save Changes</button>
+            			</div>
+                </div>
+
+              </div>
+              <div class="col-md-5">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Chat Message</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <div class="direct-chat-messages"></div>
+                      <div class="box-footer">
+                        <form action="#" method="post">
+                          <div class="input-group">
+                            <input type="text" name="chat_message" placeholder="Type Message ..." class="form-control">
+                            <span class="input-group-btn">
+                              <button name="chatBtn" type="button" id="sendBtn" onclick="javascript:aModules.oChat.send()"  class="btn btn-warning btn-flat">Send</button>
+                            </span>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+              </div>
+          </div>
+        </div>
+
+  		</div>
+
+  	</div>
+  </div>
+
+{% endblock %}
+{% endblock %}

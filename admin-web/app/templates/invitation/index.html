@@ -1,0 +1,225 @@
+{% extends "layouts/master_layout.html" %}
+
+{% block css_block %}
+<style>
+ .selectpicker {
+  height:400px;
+  overflow-y: auto;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+{% block body %}
+<div id="divLoading">
+</div>
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+     {{ invitation_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+          <h2 class="pull-left">Invite Users </h2>
+          <button type="button" name="addRecipient"  class="btn btn-success pull-right"><i class="fa fa-arrow-left"></i> Add to Recipient</button>
+          <button name="addEmail" class="btn btn-default pull-right" type="button"><i class="fa fa-upload"></i> Upload CSV(Email list)</button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+      <div class="col-md-8">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label"><i class="fa"></i> Email Category:</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" rows="5" name = "email_category" id="email_category">
+                        <option value="CONTACTS">Introductory Email Notifications - Contacts</option>
+                        <option value="RENTERS">Introductory Email Notifications - Current</option>
+                        <option value="STARTUP">Introductory Email Notifications - Startups</option>
+                        <!-- <option value="d">Newsletter - Post SNEF</option> -->
+                        </select>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label"><i class="fa"></i> Recipients:</label>
+                  <div class="col-sm-9">
+                    <input type="text" id="emails" name= "emails" readonly="readonly">
+                  </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Send Invite</button>
+
+                </div>
+            </form>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <table id="invitation-dt" class="display" cellspacing="0" width="100%"></table>
+      </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+  </form>
+</div>
+{% endblock %}
+<div name="Emails" class="modal fade DataTableModal" role="dialog" style="display: none;">
+	<div class="modal-dialog">
+		<form class="modal-content" action="{{ url_for('InvitationBP.upload_csv_page') }}"  name="UplaodCSV" method="post" enctype="multipart/form-data" >
+       {{ csv_form.csrf_token }}
+			<div class="modal-header customhdr">
+				<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+				<h4 class="modal-title"><span></span> Upload CSV</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-horizontal">
+          <input type="hidden" name="email_cat" value="">
+          <div class="form-group">
+            <div class="col-md-12">
+                <label for="exampleInputFile">Choose CSV file</label>
+                <input type="file" name="csvfile" id="exampleInputFile">
+              </div>
+            </div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button action="cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery.validate.min.js') }}"></script>
+<script>
+var   apiUrl = "{{chat_url}}";
+var table = $("#invitation-dt");
+window.Emails = {
+  oOptions : null,
+  init : function(){
+    var oSelf = this;
+    $("button[name='addEmail']").click(function(){
+      oSelf.modal();
+    });
+
+    $("button[action='saveEmail']").click(function(){
+      oSelf.save();
+    });
+
+    $("select[name='email_category']").change(function(){
+      oCatNode = this;
+
+
+      oRequest.callNoHeaders(apiUrl+"/v2/contacts/"+this.value , 'GET' , null , function(aResp){
+        $('input[name="email_cat"]').val(oCatNode.value);
+    		if ( $.fn.DataTable.fnIsDataTable(table) ) {
+    				table.DataTable().clear().draw();
+    				table.DataTable().rows.add( (aResp.status == 400 ? [] : aResp.email_contacts ) );
+    				table.DataTable().columns.adjust().draw();
+    		}else{
+    				table.DataTable({
+              pagingType : "simple",
+    					data 	  : (aResp.status == 400 ?  [] : aResp.email_contacts),
+    					columns : [
+                {
+                  sTitle		: '<input type="checkbox" name="select_all" value="1" id="example-select-all" readonly="readonly">',
+                  mData		  : 'email',
+                  sWidth    : 7
+                },
+                {
+                  sTitle		: 'Name',
+                  mData		  : 'name',
+                  render		: function(data, type, row)
+                  {
+                    return data +" ("+row.email+")"
+                  }
+                },
+              ],
+              'columnDefs': [{
+                 'targets': 0,
+                 'searchable': false,
+                 'orderable' : false,
+                 'className' : 'dt-body-center',
+                 'render': function (data, type, full, meta){
+                     return '<input type="checkbox" name="checkbox_email" value="' + data + '">';
+                 }
+              }],
+              'select': {
+                 'style': 'multi'
+              },
+              'order': [[1, 'asc']]
+    				});
+    		}
+      })
+    }).change();
+
+    setTimeout(function(){
+       $('#example-select-all').on('click', function(){
+          var rows = table.DataTable().rows({ 'search': 'applied' }).nodes();
+          $('input[type="checkbox"]', rows).prop('checked', this.checked);
+       });
+       $('#news-letter-dt tbody').on('change', 'input[type="checkbox"]', function(){
+          if(!this.checked){
+             var el = $('#example-select-all').get(0);
+             if(el && el.checked && ('indeterminate' in el)){
+                el.indeterminate = true;
+             }
+          }
+       });
+    },1000);
+
+  },
+  modal : function()
+  {
+    $("div[name='Emails']").modal('show');
+  }
+};
+
+Emails.init();
+
+ var emails =  $('input[name="emails"]');
+  emails.selectize({
+      delimiter: ',',
+      persist: false,
+      create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+      }
+  });
+  // Handle form submission event
+  $("button[name='addRecipient']").on('click', function(){
+
+      var selectize = emails[0].selectize;
+      selectize.clearOptions();
+      var table  = $("table#invitation-dt").DataTable();
+				var $chkbox_checked = table.$('input:checkbox[name="checkbox_email"]:checked', { "page": "all" });
+				if($chkbox_checked.length > 0) {
+					 for (var j = 0; j < $chkbox_checked.length; j++) {
+           selectize.createItem($($chkbox_checked.get(j)).val());
+					}
+      }
+  });
+</script>
+
+{% endblock %}

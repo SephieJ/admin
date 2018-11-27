@@ -1,0 +1,286 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Company</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ company_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.name(class="form-control", placeholder="Company Name", value=company.name) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.name.errors %}
+                                    {% for error in company_form.name.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.company_info.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.company_info(class="form-control", placeholder="Company Information", value=company.company_info) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.company_info.errors %}
+                                    {% for error in company_form.company_info.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.business_reg_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.business_reg_number(class="form-control", placeholder="Business Reg Number", value=company.business_reg_number) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.business_reg_number.errors %}
+                                    {% for error in company_form.business_reg_number.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.office_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.office_number(class="form-control", placeholder="Office Number", value=company.office_number) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.office_number.errors %}
+                                    {% for error in company_form.office_number.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.mobile_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.mobile_number(class="form-control", placeholder="Mobile Number", value=company.mobile_number) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.mobile_number.errors %}
+                                    {% for error in company_form.mobile_number.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.accreditations.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.accreditations(class="form-control", placeholder="Company Accreditation", value=company.accreditations[0]) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.accreditations.errors %}
+                                    {% for error in company_form.accreditations.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-labels no-padding-right col-sm-2"><i> Company Address</i></label>
+                    </div>
+                </div>
+
+                {% if company.address %}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.latitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.latitude(class="form-control", placeholder="Latitude", value=company.address['latitude']) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.latitude.errors %}
+                                    {% for error in company_form.latitude.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.longitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.longitude(class="form-control", placeholder="Longitude", value=company.address['longitude']) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.longitude.errors %}
+                                    {% for error in company_form.longitude.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.block_street.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.block_street(class="form-control", placeholder="Block Street", value=company.address['block_street']) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.block_street.errors %}
+                                    {% for error in company_form.block_street.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.unit_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.unit_number(class="form-control", placeholder="Unit Number", value=company.address['unit_number']) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.unit_number.errors %}
+                                    {% for error in company_form.unit_number.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.postal_code.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.postal_code(class="form-control", placeholder="Postal Code", value=company.address['postal_code']) }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.postal_code.errors %}
+                                    {% for error in company_form.postal_code.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.latitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.latitude(class="form-control", placeholder="Latitude", value="N.A") }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.latitude.errors %}
+                                    {% for error in company_form.latitude.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.longitude.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.longitude(class="form-control", placeholder="Longitude", value="N.A") }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.longitude.errors %}
+                                    {% for error in company_form.longitude.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.block_street.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.block_street(class="form-control", placeholder="Block Street", value="N.A") }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.block_street.errors %}
+                                    {% for error in company_form.block_street.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.unit_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.unit_number(class="form-control", placeholder="Unit Number", value="N.A") }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.unit_number.errors %}
+                                    {% for error in company_form.unit_number.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ company_form.postal_code.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ company_form.postal_code(class="form-control", placeholder="Postal Code", value="N.A") }}
+                            <div class="help-block with-errors"></div>
+                                {% if company_form.postal_code.errors %}
+                                    {% for error in company_form.postal_code.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a class="btn btn-default" href="{{ url_for('.view_company_page', company_id=company.id) }}" id="btnDefault">Back</a>&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for ('.company_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

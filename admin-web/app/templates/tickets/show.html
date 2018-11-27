@@ -1,0 +1,199 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="col-md-8">
+  <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{ ticket.name }}</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-horizontal form" method="POST">
+            {{ ticket_form.csrf_token }}
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                             <div class="col-sm-5">
+                                 <label id="date-added">{{ ticket.created_date.strftime('%d-%m-%Y') }}</label>
+                             </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="user-id" class="col-sm-2  no-padding-right control-labels">Reference Code:</label>
+                             <div class="col-sm-5">
+                                 {% for refcode in ticket.reference_code %}
+                                     {% if refcode %}
+                                     <label id="user-id">{{ refcode }}</label>
+                                     {% else %}
+                                     <label id="user-id">N.A</label>
+                                     {% endif %}
+                                 {% endfor %}
+                             </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="STATUS" class="col-sm-2  no-padding-right control-labels">STATUS:</label>
+                             <div class="col-sm-5">
+                               {% if ticket.status == "ONGOING" %}
+                               <td class="activated"><b>ACCEPTED</b></td>
+                              {% else %}
+                              <td class="pending"><b>{{ ticket.status }}</b></td>
+                              {% endif %}
+                             </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="username" class="col-sm-2  no-padding-right control-labels">Resource Reference Code:</label>
+                             <div class="col-sm-5">
+
+                                   {% if resource_ref_codes %}
+                                   <label id="user-id">{{ resource_ref_codes }}</label>
+                                   {% else %}
+                                   <label id="user-id">N.A.</label>
+                                   {% endif %}
+
+                             </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="first_name" class="col-sm-2  no-padding-right control-labels">Issuer:</label>
+                             <div class="col-sm-5">
+                                 <label id="user-id">{{ ticket.issuer['name'] }}</label>
+                             </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="form-group">
+                         <label for="first_name" class="col-sm-2  no-padding-right control-labels">Message:</label>
+                             <div class="col-sm-5">
+                                 <label id="user-id">{{ ticket.message }}</label>
+                             </div>
+                     </div>
+                 </div>
+
+               {% if ticket.status == 'PENDING' %}
+                <button type="submit" id="restore" name="submit" value="restore" formaction="{{ url_for('.accept_tickets', ticket_id=ticket.id) }}" class="btn btn-m btn-success"><b>ACCEPT</b></button>
+
+                {% elif ticket.status == 'ONGOING' %}
+
+                <!-- {# Description #}
+                   {% if ticket_form.solution.errors %}
+                   <div class="form-group input-display-has-error has-error">
+                   {% else %}
+                   <div class="form-group">
+                   {% endif %}
+                     <label for="Description" class="col-sm-2  no-padding-right control-labels"><span class="text-red">*</span>Description</label>
+                     {{ ticket_form.solution(class="form-control", placeholder="Tell us more about your item. e.g. size, condition, colour etc...", rows="5") }}
+                     <div class="help-block with-errors"></div>
+                     {% if ticket_form.solution.errors %}
+                       {% for error in ticket_form.solution.errors %}
+                           <span class="help-block">{{ error }}</span>
+                       {% endfor %}
+                     {% endif %}
+                   </div> -->
+
+                <div class="col-md-12">
+                     {% if ticket_form.solution.errors %}
+                       <div class="form-group input-display-has-error has-error">
+                       {% else %}
+                       <div class="form-group">
+                     {% endif %}
+                     <label for="first_name" class="col-sm-2  no-padding-right control-labels">Solution:</label>
+                       <div class="col-sm-5">
+                           {{ticket_form.solution(class="form-control", placeholder="Please provide a solution for this issue...") }}
+                           <div class="help-block with-errors"></div>
+                           {% if ticket_form.solution.errors %}
+                               {% for error in ticket_form.solution.errors %}
+                                   <span class="help-block">{{ error }}</span>
+                               {% endfor %}
+                           {% endif %}
+                       </div>
+                   </div>
+               </div>
+
+                <button type="submit" id="ban" name="submit" value="ban" formaction="{{ url_for('.close_tickets', ticket_id=ticket.id) }}" class="btn btn-m btn-danger"><b>CLOSE</b></button>
+
+             {% endif %}
+
+               &nbsp;&nbsp;&nbsp;
+
+                 <a class="btn btn-default" href="{{ url_for('.ticket_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i> Back to List</a>
+
+             </form>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+    </div>
+</div>
+<div class="col-md-4">
+  <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">Chat Message</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+            <div class="direct-chat-messages">
+              <!-- Message. Default to the left -->
+              <!-- <div class="direct-chat-msg">
+                <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name pull-left">Alexander Pierce</span>
+                  <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                </div> -->
+                <!-- /.direct-chat-info -->
+                <!-- <img class="direct-chat-img" src="https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg" alt="message user image"> -->
+                <!-- /.direct-chat-img -->
+                <!-- <div class="direct-chat-text">
+                  Is this template really for free? That's unbelievable!
+                </div> -->
+                <!-- /.direct-chat-text -->
+              <!-- </div> -->
+              <!-- /.direct-chat-msg -->
+
+              <!-- Message to the right -->
+              <!-- <div class="direct-chat-msg right">
+                <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name pull-right">Sarah Bullock</span>
+                  <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                </div> -->
+                <!-- /.direct-chat-info -->
+                <!-- <img class="direct-chat-img" src="https://adminlte.io/themes/AdminLTE/dist/img/user3-128x128.jpg" alt="message user image"> -->
+                <!-- /.direct-chat-img -->
+                <!-- <div class="direct-chat-text">
+                  You better believe it!
+                </div> -->
+                <!-- /.direct-chat-text -->
+              <!-- </div> -->
+              <!-- /.direct-chat-msg -->
+
+              <!-- Message. Default to the left -->
+        </div>
+        <div class="box-footer">
+          <form action="#" method="post">
+            <div class="input-group">
+              <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+              <span class="input-group-btn">
+                    <a href="javascript:aModules.oChat.send()"  class="btn btn-warning btn-flat">Send</a>
+                  </span>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+</div>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+     {{ newsletter_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+          <h2 class="pull-left">Broadcast Newsletter for Users</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">Email Category:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id"></label>
+                                <select class="form-control" rows="5" name = "email_category" id="email_category">
+                                    <option value="d">Newsletter - Post SNEF</option>
+                                    </select>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">Type your user:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id"></label>
+                                <select id="emails" class="contacts"  name= "emails" placeholder="Pick some people..."></select>
+                                <!-- <textarea class="form-control" rows="5" name= "emails" id="emails"></textarea> -->
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Send Newsletter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+  </form>
+</div>
+{% endblock %}
+{% endblock %}
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery.validate.min.js') }}"></script>
+<script>
+					var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+					                  '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+
+					$('#emails').selectize({
+						persist: false,
+						maxItems: null,
+						valueField: 'email',
+						labelField: 'name',
+						searchField: ['name', 'email'],
+						options: {{ user_list|tojson }},
+						render: {
+							item: function(item, escape) {
+								return '<div>' +
+									(item.name ? '<span class="name" >' + escape(item.name) + '</span>' : '') +
+									(item.email ? '<span class="email"> ' + escape(item.email) + '</span>' : '') +
+								'</div>';
+							},
+							option: function(item, escape) {
+								var label = item.name || item.email;
+								var caption = item.name ? item.email : null;
+								return '<div>' +
+									'<span class="label" style="color:#000"> ' + escape(label) + '</span>' +
+									(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+								'</div>';
+							}
+						},
+						createFilter: function(input) {
+							var match, regex;
+
+							// email@address.com
+							regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+							match = input.match(regex);
+							if (match) return !this.options.hasOwnProperty(match[0]);
+
+							// name <email@address.com>
+							regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+							match = input.match(regex);
+							if (match) return !this.options.hasOwnProperty(match[2]);
+
+							return false;
+						},
+						create: function(input) {
+							if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
+								return {email: input};
+							}
+							var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
+							if (match) {
+								return {
+									email : match[2],
+									name  : $.trim(match[1])
+								};
+							}
+							return false;
+						}
+					});
+					</script>
+
+{% endblock %}

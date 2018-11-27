@@ -1,0 +1,78 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Image</h2>
+          <br>
+          <h4 class="pull-left">&nbsp;&nbsp;&nbsp;<b>({{ banner.name }})</b></h4>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ images_form.csrf_token }}
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">Banner:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ banner.name }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        {{ images_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{images_form.name(class="form-control", placeholder="Image Name", value=image.name) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group text-left">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Image:</label>
+                            <div class="enlarge col-sm-5">
+                            <a href="#" id="imgclick"><div class="profile-avatar">
+                              <label class="settings-profile-avatar" >
+                                {% if image.image_url %}
+                                  <img id="profilepic" name="image" src="{{ image.image_url }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                                {% else %}
+                                  <img id="profilepic" src="{{ url_for('static', filename='uploads/no-image.png') }}" width="300px" height="250px" alt="" class="center-block img-rounded">
+                                {% endif %}
+                                <div class="profile-avatar-link">
+                                    <i class="fa fa-camera" aria-hidden="true"></i> Upload Picture
+                                </div>
+                              </label>
+                            </div></a>
+                            {{ images_form.image(id="imgupload", class="form-control", style="display:none", onchange="document.getElementById('profilepic').src = widndow.URL.createObjectURL(this.files[]0")}}
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ images_form.image_link.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{images_form.image_link(class="form-control", placeholder="Image Link", value=image.target_link) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ url_for ('.add_image_page', banner_id=banner.id)  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+                    <a href="{{ url_for ('.image_page', banner_id=banner.id) }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

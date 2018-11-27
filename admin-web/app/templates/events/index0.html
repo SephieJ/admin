@@ -1,0 +1,217 @@
+{% extends "layouts/master_layout.html" %}
+
+{% block css_block %}
+<style>
+ .selectpicker {
+  height:400px;
+  overflow-y: auto;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+{% block body %}
+<div id="divLoading">
+</div>
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+     {{ invitation_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+          <h2 class="pull-left">Invite Users </h2>
+          <button name="addEmail" class="btn btn-default pull-right" type="button"><i class="fa fa-plus"></i> Add Emails</button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+      <div class="col-md-8">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label"><i class="fa"></i> Email Category:</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" rows="5" name = "email_category" id="email_category">
+                        <option value="a">Introductory Email Notifications - Contacts</option>
+                        <option value="b">Introductory Email Notifications - Current</option>
+                        <option value="c">Introductory Email Notifications - Startups</option>
+                        <!-- <option value="d">Newsletter - Post SNEF</option> -->
+                        </select>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label"><i class="fa"></i> Email list:</label>
+                  <div class="col-sm-9">
+                    <select id="emails" class="selectpicker" name= "emails" placeholder="Pick some people..."></select>
+                  </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Send Invite</button>
+
+                </div>
+            </form>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <table id="news-letter-dt" class="display" cellspacing="0" width="100%">
+           <thead>
+              <tr>
+                 <th><input type="checkbox" name="select_all" value="1" id="example-select-all" readonly="readonly"></th>
+                  <th>List</th>
+              </tr>
+           </thead>
+          </table>
+      </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+  </form>
+</div>
+{% endblock %}
+<div name="Emails" class="modal fade DataTableModal" role="dialog" style="display: none;">
+	<div class="modal-dialog">
+		<form class="modal-content" action="{{ url_for('InvitationBP.upload_csv_page') }}"  name="UplaodCSV" method="post" enctype="multipart/form-data" >
+       {{ csv_form.csrf_token }}
+			<div class="modal-header customhdr">
+				<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+				<h4 class="modal-title"><span></span> Upload CSV</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-horizontal">
+          <input type="hidden" name="email_cat" value="">
+          <div class="form-group">
+            <div class="col-md-12">
+                <label for="exampleInputFile">Choose CSV file</label>
+                <input type="file" name="csvfile" id="exampleInputFile">
+              </div>
+            </div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button action="cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery.validate.min.js') }}"></script>
+<script>
+var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+                  '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+
+selectElem = $('#emails');
+var   apiUrl = "{{chat_url}}";
+selectElem.selectize({
+  pers1ist: false,
+  maxItems: null,
+  valueField: 'email',
+  labelField: 'name',
+  searchField: ['name', 'email'],
+  options: [],
+  render: {
+      item: function(item, escape) {
+          return '<div>' +
+              (item.name ? '<span class="name">' + escape(item.name) + '</span> ' : '') +
+              (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
+          '</div>';
+      },
+      option: function(item, escape) {
+        var label = item.name || item.email;
+        var caption = item.name ? item.email : null;
+        return '<div>' +
+          '<span class="label" style="color:#000">' + escape(label) + '</span>' +
+          (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+        '</div>';
+      }
+  },
+  createFilter: function(input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+  },
+  create: function(input) {
+      if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
+          return {email: input};
+      }
+      var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
+      if (match) {
+          return {
+              email : match[2],
+              name  : $.trim(match[1])
+          };
+      }
+      alert('Invalid email address.');
+      return false;
+  }
+});
+
+window.Emails = {
+  oOptions : null,
+  init : function(){
+    var oSelf = this;
+    $("button[name='addEmail']").click(function(){
+      oSelf.modal();
+    });
+
+    $("button[action='saveEmail']").click(function(){
+      oSelf.save();
+    });
+
+    $("select[name='email_category']").change(function(){
+        oRequest.callNoHeaders(apiUrl+"/v2/contacts/"+this.value , 'GET' , null , function(sResp){
+          var $select = $('#emails').selectize(sResp.email_contacts);
+          var selectize = $select[0].selectize;
+          selectize.clearOptions();
+          selectize.addOption(sResp.email_contacts);
+          var selected = [];
+          $.each(sResp.email_contacts, function(i,v){
+            selected.push(v.email);
+          });
+          selectize.setValue(selected);
+          selectize.refreshOptions();
+        });
+        $('input[name="email_cat"]').val(this.value);
+    }).change();
+  },
+  modal : function()
+  {
+    $("div[name='Emails']").modal('show');
+  }
+};
+
+Emails.init();
+
+</script>
+
+{% endblock %}

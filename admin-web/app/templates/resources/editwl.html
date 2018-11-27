@@ -1,0 +1,79 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <h2 class="pull-left">Edit Wishlist</h2>
+            <br>
+            <h4 class="pull-left">&nbsp;&nbsp;&nbsp;<b>({{ wishlist.name }})</b></h4>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div id="page_content_body_display">
+        <div class="text-left">
+          <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+            {{ wishlist_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ wishlist_form.name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ wishlist_form.name(class="form-control", placeholder="Wishlist Name", value=wishlist.name) }}
+                            <div class="help-block with-errors"></div>
+                                {% if wishlist_form.name.errors %}
+                                    {% for error in wishlist_form.name.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ wishlist_form.description.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ wishlist_form.description(class="form-control", placeholder="Wishlist Description", maxlength="250", rows="7", cols="30", value=wishlist.description) }}
+                            <div class="help-block with errors"></div>
+                                {% if wishlist_form.description.errors %}
+                                    {% for error in wishlist_form.description.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <a href="{{ url_for ('.edit_wishlist_page', wishlist_id=wishlist.id)  }}" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>&nbsp;&nbsp;&nbsp;
+
+                    <a class="btn btn-default" href="{{ url_for('.view_wishlist_page', wishlist_id=wishlist.id) }}" id="btnDefault">Back</a>&nbsp;&nbsp;&nbsp;
+
+                    <a href="{{ url_for ('.pending_wishlist_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}
+
+

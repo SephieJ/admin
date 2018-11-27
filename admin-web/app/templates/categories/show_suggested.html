@@ -1,0 +1,621 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+
+{% if suggested_category.status == 'PENDING' %}
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+    {{ suggested_category_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            <span class="username">
+                <h3> {{ suggested_category.name }} </h3>
+               {% if suggested_category.status == 'ARCHIVED' %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == "REJECTED" %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == 'PENDING' %}
+               <span class="label label-warning text-center">PENDING</span>
+               {% else %}
+               <span class="label label-success text-center">ACCEPTED</span>
+               {% endif %}
+            </span>
+            {% if suggested_category.status == 'PENDING' %}
+            <div class="action-buttons pull-right">
+              <form>
+                {# <button type="submit" formaction="{{ url_for ('.accept_suggested_category', category_id=suggested_category.id) }}" class="btn btn-success">ACCEPT</button> #}
+                <button type="button" class="btn btn-success" id="acceptCategory">ACCEPT</button>
+                &nbsp;&nbsp;&nbsp;
+                {# <button type="banned" formaction="{{ url_for ('.reject_suggested_category', category_id=suggested_category.id) }}" class="btn btn-danger">REJECT</button> #}
+                <button type="button" class="btn btn-danger" id="rejectCategory">REJECT</button>
+              </form>
+            </div>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                            <div class="col-sm-5">
+                                <label id="date-added">{{ suggested_category.created_date.strftime('%d-%m-%Y') }}</label>
+                            </div>
+                    </div>
+                </div>
+
+               <div class="col-md-12">
+                   <div class="form-group">
+                       <label for="user-id" class="col-sm-2  no-padding-right control-labels">ID:</label>
+                           <div class="col-sm-5">
+                               <label id="user-id">{{ suggested_category.id }}</label>
+                           </div>
+                   </div>
+               </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Description:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ suggested_category.description }}</label>
+                            </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    </div>
+  </form>
+    <!-- /.box-body -->
+</div>
+<div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <!-- /.box-header -->
+        {% if suggested_category != "" %}
+        {% if suggested_category|count > 0 %}
+        <div class="box-body">
+        <form class="form-horizontal form" method="POST">
+        {{ suggested_subcategory_form.csrf_token }}
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th>DATE CREATED</th>
+                <th>ID</th>
+                <th>SUBCATEGORY NAME</th>
+                <th>DESCRIPTION</th>
+                <th>STATUS</th>
+                <!-- <th class="text-right">ACTION</th>
+                <th style="width: 10px;">ACTION</th> -->
+              </tr>
+            </thead>
+            <tbody>
+            {% for suggested_subcategory in suggested_subcategories %}
+                {% if suggested_subcategory.status == "PENDING" %}
+                    <tr>
+                        <td>{{ suggested_subcategory.created_date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ suggested_subcategory.id }}</td>
+                        <td>{{ suggested_subcategory.name }}</td>
+                        <td>{{ suggested_subcategory.description }}</td>
+                        {# Status #}
+                        <td class="pending">{{ suggested_subcategory.status }}</td>
+                        {# {% if suggested_subcategory.status == 'PENDING' %}
+                            <td class="pending">PENDING</td>
+                            {% elif suggested_subcategory.status == 'REJECTED' %}
+                            <td class="rejected">REJECTED</td>
+                            {% else %}
+                            <td class="activated">ACCEPTED</td>
+                        {% endif %} #}
+                        {# Actions #}
+                        {# <td class="text-right">
+                            <div class="">
+                                <button type="submit" name="accept" attr-cat-id="{{ suggested_category.id }}"  attr-sub-cat-id="{{ suggested_subcategory.id }}" class="btn btn-success"><span class="fa fa-archive"></span> ACCEPT</button>
+                                <!-- <button type="submit" formaction="{{ url_for ('.accept_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-success">
+                                <span class="fa fa-archive"></span> ACCEPT
+                                </button> -->
+        
+                                <button type="banned" formaction="{{ url_for ('.reject_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-danger">
+                                <span class="fa fa-archive"></span> REJECT
+                                </button>
+                            </div> #}
+                        {# {% if suggested_subcategory.status == 'PENDING' %}
+                            <div class="">
+                                <button type="submit" name="accept" attr-cat-id="{{ suggested_category.id }}"  attr-sub-cat-id="{{ suggested_subcategory.id }}" class="btn btn-success"><span class="fa fa-archive"></span> ACCEPT</button>
+                                <!-- <button type="submit" formaction="{{ url_for ('.accept_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-success">
+                                <span class="fa fa-archive"></span> ACCEPT
+                                </button> -->
+        
+                                <button type="banned" formaction="{{ url_for ('.reject_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-danger">
+                                <span class="fa fa-archive"></span> REJECT
+                                </button>
+                            </div>
+                        {% endif %} #}
+                        {# </td> #}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {% if suggested_subcategories|count == 0 %}
+          <h3 class="text-center alert alert-info">No Record(s) Found!</h3>
+          {% endif %}
+        {% endif %}
+        {% endif %}
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="pull-left">
+                        <a class="btn btn-default" href="{{ url_for('.suggested_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a>
+                    </div>
+                </div>
+            </div>
+          </form>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+{% elif suggested_category.status == "ACTIVE" %}
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+    {{ suggested_category_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            <span class="username">
+                <h3> {{ suggested_category.name }} </h3>
+               {% if suggested_category.status == 'ARCHIVED' %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == "REJECTED" %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == 'PENDING' %}
+               <span class="label label-warning text-center">PENDING</span>
+               {% else %}
+               <span class="label label-success text-center">ACCEPTED</span>
+               {% endif %}
+            </span>
+            {% if suggested_category.status == 'PENDING' %}
+            <div class="action-buttons pull-right">
+              <form>
+                <button type="submit" formaction="{{ url_for ('.accept_suggested_category', category_id=suggested_category.id) }}" class="btn btn-success">ACCEPT</button>
+                &nbsp;&nbsp;&nbsp;
+                <button type="banned" formaction="{{ url_for ('.reject_suggested_category', category_id=suggested_category.id) }}" class="btn btn-danger">REJECT</button>
+              </form>
+            </div>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                            <div class="col-sm-5">
+                                <label id="date-added">{{ suggested_category.created_date.strftime('%d-%m-%Y') }}</label>
+                            </div>
+                    </div>
+                </div>
+
+               <div class="col-md-12">
+                   <div class="form-group">
+                       <label for="user-id" class="col-sm-2  no-padding-right control-labels">ID:</label>
+                           <div class="col-sm-5">
+                               <label id="user-id">{{ suggested_category.id }}</label>
+                           </div>
+                   </div>
+               </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Description:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ suggested_category.description }}</label>
+                            </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    </div>
+  </form>
+    <!-- /.box-body -->
+</div>
+<div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <!-- /.box-header -->
+        {% if suggested_category != "" %}
+        {% if suggested_category|count > 0 %}
+        <div class="box-body">
+        <form class="form-horizontal form" method="POST">
+        {{ suggested_subcategory_form.csrf_token }}
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th>DATE CREATED</th>
+                <th>ID</th>
+                <th>SUBCATEGORY NAME</th>
+                <th>DESCRIPTION</th>
+                <th>STATUS</th>
+                <th class="text-right">ACTION</th>
+                <!-- <th style="width: 10px;">ACTION</th> -->
+              </tr>
+            </thead>
+            <tbody>
+            {% for suggested_subcategory in suggested_subcategories %}
+                {% if suggested_subcategory.status == "PENDING" %}
+                    <tr>
+                        <td>{{ suggested_subcategory.created_date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ suggested_subcategory.id }}</td>
+                        <td>{{ suggested_subcategory.name }}</td>
+                        <td>{{ suggested_subcategory.description }}</td>
+                        {# Status #}
+                        <td class="pending">{{ suggested_subcategory.status }}</td>
+                        {# {% if suggested_subcategory.status == 'PENDING' %}
+                            <td class="pending">PENDING</td>
+                            {% elif suggested_subcategory.status == 'REJECTED' %}
+                            <td class="rejected">REJECTED</td>
+                            {% else %}
+                            <td class="activated">ACCEPTED</td>
+                        {% endif %} #}
+                        {# Actions #}
+                        <td class="text-right">
+                            <div class="">
+                                <button type="submit" name="accept" attr-cat-id="{{ suggested_category.id }}"  attr-sub-cat-id="{{ suggested_subcategory.id }}" class="btn btn-success"><span class="fa fa-archive"></span> ACCEPT</button>
+                                <!-- <button type="submit" formaction="{{ url_for ('.accept_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-success">
+                                <span class="fa fa-archive"></span> ACCEPT
+                                </button> -->
+        
+                                {# <button type="banned" formaction="{{ url_for ('.reject_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-danger">
+                                <span class="fa fa-archive"></span> REJECT
+                                </button> #}
+                                <button type="button" class="btn btn-danger" name="reject" attr-cat-id="{{ suggested_category.id }}" attr-sub-cat-id="{{ suggested_subcategory.id }}"
+                                attr-sub-cat-name="{{ suggested_subcategory.name|safe|upper }}">
+                                    <span class="fa fa-archive"></span>REJECT
+                                </button>
+                            </div>
+                        {# {% if suggested_subcategory.status == 'PENDING' %}
+                            <div class="">
+                                <button type="submit" name="accept" attr-cat-id="{{ suggested_category.id }}"  attr-sub-cat-id="{{ suggested_subcategory.id }}" class="btn btn-success"><span class="fa fa-archive"></span> ACCEPT</button>
+                                <!-- <button type="submit" formaction="{{ url_for ('.accept_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-success">
+                                <span class="fa fa-archive"></span> ACCEPT
+                                </button> -->
+        
+                                <button type="banned" formaction="{{ url_for ('.reject_suggested_subcategory', category_id=suggested_category.id, subcategory_id=suggested_subcategory.id) }}" class="btn btn-danger">
+                                <span class="fa fa-archive"></span> REJECT
+                                </button>
+                            </div>
+                        {% endif %} #}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {% if suggested_subcategories|count == 0 %}
+          <h3 class="text-center alert alert-info">No Record(s) Found!</h3>
+          {% endif %}
+        {% endif %}
+        {% endif %}
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="pull-left">
+                        {# <a class="btn btn-default" href="{{ url_for('.suggested_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a> #}
+                        <a class="btn btn-default" href="{{ url_for('.category_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a>
+                    </div>
+                </div>
+            </div>
+          </form>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+{% else %}
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+    {{ suggested_category_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            <span class="username">
+                <h3> {{ suggested_category.name }} </h3>
+               {% if suggested_category.status == 'ARCHIVED' %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == "REJECTED" %}
+               <span class="label label-danger text-center">BANNED</span>
+               {% elif suggested_category.status == 'PENDING' %}
+               <span class="label label-warning text-center">PENDING</span>
+               {% else %}
+               <span class="label label-success text-center">ACCEPTED</span>
+               {% endif %}
+            </span>
+            {% if suggested_category.status == 'PENDING' %}
+            <div class="action-buttons pull-right">
+              <form>
+                <button type="submit" formaction="{{ url_for ('.accept_suggested_category', category_id=suggested_category.id) }}" class="btn btn-success">ACCEPT</button>
+                &nbsp;&nbsp;&nbsp;
+                <button type="banned" formaction="{{ url_for ('.reject_suggested_category', category_id=suggested_category.id) }}" class="btn btn-danger">REJECT</button>
+              </form>
+            </div>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                            <div class="col-sm-5">
+                                <label id="date-added">{{ suggested_category.created_date.strftime('%d-%m-%Y') }}</label>
+                            </div>
+                    </div>
+                </div>
+
+               <div class="col-md-12">
+                   <div class="form-group">
+                       <label for="user-id" class="col-sm-2  no-padding-right control-labels">ID:</label>
+                           <div class="col-sm-5">
+                               <label id="user-id">{{ suggested_category.id }}</label>
+                           </div>
+                   </div>
+               </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Description:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ suggested_category.description }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                {# <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="pull-left">
+                            <a class="btn btn-default" href="{{ url_for('.archived_category_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a>
+                        </div>
+                    </div>
+                </div> #}
+
+        </div>
+    </div>
+    </div>
+  </form>
+    <!-- /.box-body -->
+</div>
+<div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <!-- /.box-header -->
+        {% if suggested_category != "" %}
+        {% if suggested_category|count > 0 %}
+        <div class="box-body">
+        <form class="form-horizontal form" method="POST">
+        {{ suggested_subcategory_form.csrf_token }}
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th>DATE CREATED</th>
+                <th>ID</th>
+                <th>SUBCATEGORY NAME</th>
+                <th>DESCRIPTION</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for suggested_subcategory in suggested_subcategories %}
+              <tr>
+                <td>{{ suggested_subcategory.created_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ suggested_subcategory.id }}</td>
+                <td>{{ suggested_subcategory.name }}</td>
+                <td>{{ suggested_subcategory.description }}</td>
+                <td class="banned">BANNED</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {% if suggested_subcategories|count == 0 %}
+          <h3 class="text-center alert alert-info">No Record(s) Found!</h3>
+          {% endif %}
+        {% endif %}
+        {% endif %}
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="pull-left">
+                        <a class="btn btn-default" href="{{ url_for('.archived_category_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i>Back to List</a>
+                    </div>
+                </div>
+            </div>
+
+          </form>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+{% endif %}
+{% endblock %}
+
+<!--Modal Agreements Confirm-->
+<div name="ConfirmAcceptSubcategory" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+     <form class="form-horizontal modal-content" method="POST">
+         {{ suggested_category_form.csrf_token }}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+        <h4 class="modal-title">Confirm acceptance</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-12" >
+              <p>Are you sure you want to accept this sub category?</p>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer customdlft">
+      <form>
+        <button name="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button name="Confirm" type="submit" class="btn btn-primary">Accept</button>
+        </form>
+      </div>
+  </div>
+</div>
+
+<div id="promptAcceptCategory" style="z-index:1051" class="modal fade DataTableModal" role="dialog">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url_for ('.accept_suggested_category', category_id=suggested_category.id) }}" method="POST">
+                    {{ suggested_category_form.csrf_token }}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                            <h4 class="modal-title">Accept Confirmation</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to ACCEPT item {{ suggested_category.name|safe|upper }}?
+                        </div>
+                        <div class="modal-footer customdlft">
+                            <button name="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="banned" class="btn btn-primary">ACCEPT</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+
+<div id="promptRejectCategory" style="z-index:1051" class="modal fade DataTableModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ url_for ('.reject_suggested_category', category_id=suggested_category.id) }}" method="POST">
+                {{ suggested_category_form.csrf_token }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                        <h4 class="modal-title">Reject Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to REJECT item {{ suggested_category.name|safe|upper }}?
+                    </div>
+                    <div class="modal-footer customdlft">
+                        <button name="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="banned" class="btn btn-danger">Yes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="promptRejectSubCategory" style="z-index:1051" class="modal fade DataTableModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="rejectSubCategoryForm" method="POST">
+                {{ suggested_subcategory_form.csrf_token }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                        <h4 class="modal-title">Reject Confirmation</h4>
+                    </div>
+                    <div class="modal-body" id="subcategoryName">
+                    </div>
+                    <div class="modal-footer customdlft">
+                        <button name="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="banned" class="btn btn-danger">Yes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+  $("button[name='accept']").click(function(e){
+    e.preventDefault();
+    $("div[name='ConfirmAcceptSubcategory']").modal('show');
+    var cat_id = $(this).attr("attr-cat-id");
+    var sub_cat_id = $(this).attr("attr-sub-cat-id");
+    $("button[name='Confirm']").attr("formaction","/suggested-categories/"+cat_id+"/subcategories/"+sub_cat_id+"/accept")
+  });
+
+$("#rejectCategory").click(() => { $("#promptRejectCategory").modal("show"); });
+
+$("#acceptCategory").click(() => { $("#promptAcceptCategory").modal("show"); });
+
+$("button[name='reject']").click(function(e) {
+    var sub_cat_name = $(this).attr("attr-sub-cat-name");
+    $("#subcategoryName").text(`Are you sure you want to REJECT item ${sub_cat_name}?`);
+    $("#promptRejectSubCategory").modal("show");
+    var cat_id = $(this).attr("attr-cat-id");
+    var sub_cat_id = $(this).attr("attr-sub-cat-id");
+    $("#rejectSubCategoryForm").attr("action", `/suggested-categories/${cat_id}/subcategories/${sub_cat_id}/reject`);
+});
+</script>
+{% endblock %}

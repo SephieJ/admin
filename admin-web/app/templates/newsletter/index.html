@@ -1,0 +1,208 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+  <form class="form-horizontal form" method="POST">
+     {{ newsletter_form.csrf_token }}
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+          <h2 class="pull-left">Broadcast Newsletter for Users </h2>
+          <button type="button" name="addRecipient"  class="btn btn-success pull-right">Add to Recipient</button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+      <div class="col-md-8">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">Email Category:</label>
+                              <div class="col-sm-12">
+                                <label id="user-id"></label>
+                                <select class="form-control" rows="5" name = "email_category" id="email_category">
+                                    <option value="SNEF2018">Newsletter - Post SNEF</option>
+                                    </select>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">Recipient:</label>
+                            <div class="col-sm-12">
+                                <label id="user-id"></label>
+                                <input type="text" id="emails" name= "emails">
+                                <!-- <select id="emails" class="contacts"  name= "emails" placeholder="Pick some people..."></select> -->
+                                <!-- <textarea class="form-control" rows="5" name= "emails" id="emails"></textarea> -->
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Send Newsletter</button>
+                </div>
+            </form>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <table id="news-letter-dt" class="display" cellspacing="0" width="100%">
+           <thead>
+              <tr>
+                 <th><input type="checkbox" name="select_all" value="1" id="example-select-all" readonly="readonly"></th>
+                  <th>Contacts</th>
+              </tr>
+           </thead>
+          </table>
+      </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+  </form>
+</div>
+{% endblock %}
+{% endblock %}
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='assets/js/selectize.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jquery.validate.min.js') }}"></script>
+<script>
+  var table = $('#news-letter-dt').DataTable({
+        'ajax': sUrl+'/get-users-dt',
+        'pagingType' : "simple",
+        'columnDefs': [{
+           'targets': 0,
+           'searchable': false,
+           'orderable': false,
+           'sWidth'   : 7,
+           'className': 'dt-body-center',
+           'render': function (data, type, full, meta){
+               return '<input type="checkbox" name="checkbox_email" value="' + data + '">';
+           }
+        }],
+        'select': {
+           'style': 'multi'
+        },
+        'order': [[1, 'asc']]
+     });
+
+     // Handle click on "Select all" control
+      $('#example-select-all').on('click', function(){
+         // Get all rows with search applied
+         var rows = table.rows({ 'search': 'applied' }).nodes();
+         // Check/uncheck checkboxes for all rows in the table
+         $('input[type="checkbox"]', rows).prop('checked', this.checked);
+      });
+
+      // Handle click on checkbox to set state of "Select all" control
+      $('#news-letter-dt tbody').on('change', 'input[type="checkbox"]', function(){
+           // If checkbox is not checked
+           if(!this.checked){
+              var el = $('#example-select-all').get(0);
+              // If "Select all" control is checked and has 'indeterminate' property
+              if(el && el.checked && ('indeterminate' in el)){
+                 // Set visual state of "Select all" control
+                 // as 'indeterminate'
+                 el.indeterminate = true;
+              }
+           }
+        });
+
+					// var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+					//                   '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+          //
+					// $('#emails').selectize({
+					// 	persist: false,
+					// 	maxItems: null,
+					// 	valueField: 'email',
+					// 	labelField: 'name',
+					// 	searchField: ['name', 'email'],
+					// 	options: {{ user_list|tojson }},
+					// 	render: {
+					// 		item: function(item, escape) {
+					// 			return '<div>' +
+					// 				(item.name ? '<span class="name" >' + escape(item.name) + '</span>' : '') +
+					// 				(item.email ? '<span class="email"> ' + escape(item.email) + '</span>' : '') +
+					// 			'</div>';
+					// 		},
+					// 		option: function(item, escape) {
+					// 			var label = item.name || item.email;
+					// 			var caption = item.name ? item.email : null;
+					// 			return '<div>' +
+					// 				'<span class="label" style="color:#000"> ' + escape(label) + '</span>' +
+					// 				(caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+					// 			'</div>';
+					// 		}
+					// 	},
+					// 	createFilter: function(input) {
+					// 		var match, regex;
+          //
+					// 		// email@address.com
+					// 		regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+					// 		match = input.match(regex);
+					// 		if (match) return !this.options.hasOwnProperty(match[0]);
+          //
+					// 		// name <email@address.com>
+					// 		regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+					// 		match = input.match(regex);
+					// 		if (match) return !this.options.hasOwnProperty(match[2]);
+          //
+					// 		return false;
+					// 	},
+					// 	create: function(input) {
+					// 		if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
+					// 			return {email: input};
+					// 		}
+					// 		var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
+					// 		if (match) {
+					// 			return {
+					// 				email : match[2],
+					// 				name  : $.trim(match[1])
+					// 			};
+					// 		}
+					// 		return false;
+					// 	}
+					// });
+
+     var emails =  $('input[name="emails"]');
+      emails.selectize({
+          delimiter: ',',
+          persist: false,
+          create: function(input) {
+            return {
+                value: input,
+                text: input
+            }
+          }
+      });
+      // Handle form submission event
+      $("button[name='addRecipient']").on('click', function(){
+          var selectize = emails[0].selectize;
+          selectize.clearOptions();
+          var table  = $("table#news-letter-dt").DataTable();
+   				var $chkbox_checked = table.$('input:checkbox[name="checkbox_email"]:checked', { "page": "all" });
+   				if($chkbox_checked.length > 0) {
+   					 for (var j = 0; j < $chkbox_checked.length; j++) {
+               selectize.createItem($($chkbox_checked.get(j)).val());
+   					}
+          }
+      });
+
+      $("#emails-selectized").prop('readonly','readonly');
+</script>
+
+{% endblock %}

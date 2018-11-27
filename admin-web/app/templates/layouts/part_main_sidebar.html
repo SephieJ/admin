@@ -1,0 +1,172 @@
+{% set main_side_menus = [
+        {
+            "name": "Dashboard",
+            "link": "HomeBP.home",
+            "icon": "dashboard"
+        },
+        {
+            "name": "Tickets",
+            "link": "ticket_list_page",
+            "icon": "ticket"
+        },
+        {
+            "name": "Categories",
+            "icon": "tags",
+            "itemss": [
+                {
+                    "name": "Category List",
+                    "link": "CategoryBP.category_page",
+                    "icon": "list-alt"
+                },
+                {
+                    "name": "Suggested Categories",
+                    "link": "CategoryBP.suggested_page",
+                    "icon": "share"
+                }
+            ]
+        },
+        {
+            "name": "Wishlists",
+            "icon": "th-list",
+            "itemss": [
+                {
+                    "name": "Wishlist",
+                    "link": "ResourceBP.wishlist_page",
+                    "icon": "cubes"   
+                },
+                
+                {
+                    "name": "Pending Wishlist",
+                    "link": "ResourceBP.pending_wishlist_page",
+                    "icon": "cubes"   
+                },
+            ]
+            
+        },
+
+        {
+            "name": "Companies",
+            "link": "CompanyBP.company_page",
+            "icon": "building"
+        },
+        {
+            "name": "Resources",
+            "icon": "cubes",
+            "itemss": [
+                {
+                    "name": "Resource List",
+                    "link": "ResourceBP.resource_page",
+                    "icon": "cubes"
+                },
+
+                {
+                    "name": "Pending Resource List",
+                    "link": "ResourceBP.pending_page",
+                    "icon": "cubes"
+                },
+
+                {
+                    "name": "Updated Resource List",
+                    "link": "ResourceBP.update_page",
+                    "icon": "cubes"
+                }
+
+
+            ]
+        },
+        {
+            "name": "Users",
+            "link": "UserBP.user_page",
+            "icon": "users"
+        },
+        {
+            "name": "Admin Users",
+            "link": "AdminBP.admin_page",
+            "icon": "user-secret"
+        },
+        {
+            "name": "Web Management",
+            "icon": "gear",
+            "itemss": [
+                {
+                    "name": "FAQs",
+                    "link": "FaqBP.faq_page",
+                    "icon": "question-circle"
+                },
+                {
+                    "name": "Banners",
+                    "link": "BannerBP.banner_page",
+                    "icon": "image-circle"
+                }
+            ]
+        },
+        {
+            "name": "Users Newsletters",
+            "link": "NewsletterBP.newsletter_page",
+            "icon": "envelope-o"
+        },
+        {
+            "name": "Events Newsletters",
+            "link": "InvitationBP.events_page",
+            "icon": "envelope-o"
+        },
+        {
+            "name": "Invitation",
+            "link": "InvitationBP.invitation_page",
+            "icon": "handshake-o"
+        },
+        {
+            "name": "Blog",
+            "link": "HomeBP.home",
+            "icon": "pencil-square-o"
+        }
+    ] %}
+
+{% set active_page = active_page|default('DashboardBP.dashboard_page') -%}
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+
+  <!-- Sidebar user panel (optional) -->
+  <div class="user-panel">
+    <div class="pull-left image">
+      <img src="{{ url_for('static', filename='uploads/no_photo.png') }}" class="img-circle" alt="User Image">
+    </div>
+    <div class="pull-left info">
+      <p>{{ current_user.first_name }} {{ current_user.last_name }}</p>
+      <!-- Status -->
+      <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+    </div>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <ul class="sidebar-menu">
+    <li class="header">Tools</li>
+
+    <!-- Optionally, you can add icons to the links -->
+    {% for menu in main_side_menus %}
+    	{% if menu.itemss %}
+    		<li class="treeview {% for value in menu.itemss %}{% if value.link == g.activepage %}active{% endif %}{% endfor %}">
+    		  <a href="#"><i class="fa fa-{{ menu.icon }}"></i> <span>{{ menu.name }}</span>
+    		    <span class="pull-right-container">
+    		      <i class="fa fa-angle-left pull-right"></i>
+    		    </span>
+    		  </a>
+    		  <ul class="treeview-menu">
+			    {% for item in menu.itemss %}
+    		    <li class="{% if item.link == g.activepage %}active{% endif %}"><a href="{{ url_for(item.link)}}"><i class="fa fa-{{ item.icon }}"></i>{{ item.name }}</a></li>
+    			{% endfor %}
+    		  </ul>
+    		</li>
+    	{% else %}
+			<li class="{% if menu.link == g.activepage %}active{% endif %}"><a href="{{ url_for(menu.link)}}"><i class="fa fa-{{ menu.icon }}"></i> <span>{{ menu.name }}</span></a></li>
+    	{% endif %}
+    {% endfor %}
+
+  </ul>
+  <!-- /.sidebar-menu -->
+</section>
+<!-- /.sidebar -->
+</aside>

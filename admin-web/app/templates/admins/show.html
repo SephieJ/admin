@@ -1,0 +1,107 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="row row-centered">
+    <div class="col-xs-5 col-centered">
+
+        <!-- Profile Image -->
+        <div class="box box-primary">
+            <div class="box-body box-profile">
+                <form id="userForm" method="POST" class="form-horizontal">
+                {{ admin_form.csrf_token }}
+                <div class="image-cropper">
+                {% if admin.image_url == None %}
+                <img class="profile-user-img img-responsive img-circle" src="{{ url_for('static', filename='uploads/no_photo.png') }}" alt="User profile picture">
+                {% else %}
+                <img class="profile-user-img img-responsive img-circle" src="{{ admin.image_url }}" alt="User profile picture">
+                {% endif %}
+                </div>
+
+                <h3 class="profile-username text-center">{{ admin.first_name }} {{ admin.last_name }}</h3>
+
+                <p class="text-muted text-center">
+                    {{ admin.roles[0] }}
+                    {% if admin.status == 'ACTIVATED' %}
+                    <span class="label label-success text-center">ACTIVE</span>
+                    {% else %}
+                    <span class="label label-danger text-center">DELETED</span>
+                    {% endif %}
+                </p>
+                <hr>
+                <div class="box-body">
+                    <strong><i class="fa fa-calendar-check-o margin-r-5"></i> Date Registered</strong>
+
+                    <p class="text-muted">
+                        {{ admin.created_date.strftime('%Y-%m-%d') }}
+                    </p>
+
+                    <hr>
+                    <strong><i class="fa fa-user-secret margin-r-5"></i> Username</strong>
+
+                    <p class="text-muted">
+                        {{ admin.username }}
+                    </p>
+
+                    <strong><i class="fa fa-id-badge margin-r-5"></i> Designation</strong>
+
+                    {% if admin.designation == "" %}
+                    <p class="text-muted">  N.A.</p>
+                    {% else %}
+                    <p class="text-muted">{{ admin.designation }}</p>
+                    {% endif %}
+
+
+                    <strong><i class="fa fa-envelope margin-r-5"></i> Email Address</strong>
+
+                    <p class="text-muted">
+                        {{ admin.email }}
+                    </p>
+
+                    <hr>
+                    <strong><i class="fa fa-phone-square margin-r-5"></i> Landline Number</strong>
+
+                    {% if admin.landline_number == "" %}
+                    <p class="text-muted">N.A.</p>
+                    {% else %}
+                    <p class="text-muted">{{ admin.landline_number }}</p>
+                    {% endif %}
+
+                    <strong><i class="fa fa-mobile-phone margin-r-5"></i> Mobile Number</strong>
+
+                    {% if admin.mobile_number == "" %}
+                    <p class="text-muted">N.A.</p>
+                    {% else %}
+                    <p class="text-muted">{{ admin.mobile_number }}</p>
+                    {% endif %}
+
+                    <hr>
+                    <!-- <strong><i class="fa fa-birthday-cake margin-r-5"></i> Birth Date</strong>
+
+                    <p>
+                        {% if admin.birth_date == "" %}
+                        <span class="label label-primary">N.A.</span>
+                        {% else %}
+                        <span class="label label-primary">{{ admin.birth_date }}</span>
+                        {% endif %}
+                    </p> -->
+
+                    <hr>
+                {% if admin.status == 'ARCHIVED'  %}
+                    <button type="submit" id="restore" name="restore" value="restore" formaction="{{ url_for('.restore_admin', username=admin.username) }}" class="btn btn-m btn-success"><b>RESTORE</b></button>
+                {% else %}
+                    <button type="submit" id="update" name="update" value="update" formaction="{{ url_for('.edit_admin_page', username=admin.username) }}" class="btn btn-m btn-warning"><i class="fa fa-edit"><b> UPDATE</b></i></button>&nbsp;&nbsp;&nbsp;
+
+                    <button type="submit" id="change" name="change" value="change" formaction="{{ url_for('.change_password', username=admin.username) }}" class="btn btn-m btn-primary"><i class="fa fa-key"><b> CHANGE PASSWORD</b></i></button>&nbsp;&nbsp;&nbsp;
+                {% endif %}
+                </div>
+                </form>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+        <a href="{{ url_for ('.admin_page', admin_id=admin.id) }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+    </div>
+    <!-- /.col -->
+</div>
+{% endblock %}
+{% endblock %}

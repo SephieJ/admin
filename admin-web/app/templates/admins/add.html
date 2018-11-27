@@ -1,0 +1,182 @@
+{% extends "layouts/master_layout.html" %}
+{% block css_block %}
+<link href="{{ url_for('static', filename='assets/plugins/datepicker/datepicker3.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+{% block body %}
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Create Admin</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ admin_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.roles.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.roles(class="form-control", placeholder="Roles") }}
+                            <div class="help-block with-errors danger"></div>
+                            {% if admin_form.roles.errors %}
+                                {% for error in admin_form.roles.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.first_name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.first_name(class="form-control", placeholder="First Name") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.first_name.errors %}
+                                {% for error in admin_form.first_name.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.last_name.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.last_name(class="form-control", placeholder="Last Name") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.last_name.errors %}
+                                {% for error in admin_form.last_name.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.landline_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.landline_number(class="form-control", placeholder="Landline Number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.landline_number.errors %}
+                                {% for error in admin_form.landline_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.mobile_number.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.mobile_number(class="form-control", placeholder="Mobile Number") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.mobile_number.errors %}
+                                {% for error in admin_form.mobile_number.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.designation.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.designation(class="form-control", placeholder="Designation") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.designation.errors %}
+                                {% for error in admin_form.designation.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.email.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.email(class="form-control", placeholder="Email Address") }}
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.email.errors %}
+                                {% for error in admin_form.email.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.username.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.username(class="form-control", placeholder="Username") }}
+                        </div>
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.username.errors %}
+                                {% for error in admin_form.username.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ admin_form.password.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{admin_form.password(class="form-control", placeholder="Password") }}
+                        </div>
+                            <div class="help-block with-errors"></div>
+                            {% if admin_form.password.errors %}
+                                {% for error in admin_form.password.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                    </div>
+                </div>
+
+               <!--  <div class="col-md-12">
+                   <div class="form-group">
+                       {{ admin_form.image.label (class="control-labels no-padding-right col-sm-2") }}
+                       <div class="col-sm-5">
+                           {{admin_form.image(class="form-control") }}
+                       </div>
+                           <div class="help-block with-errors"></div>
+                           {% if admin_form.image.errors %}
+                               {% for error in admin_form.image.errors %}
+                                   <span class="error text-danger">{{ error }}</span>
+                               {% endfor %}
+                           {% endif %}
+                   </div>
+               </div> -->
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="" class="btn btn-default" id="btn_reset"><i class="fa fa-refresh" aria-hidden="true"></i> Reset</a>
+                    <a href="{{ url_for ('.admin_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

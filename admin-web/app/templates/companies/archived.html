@@ -1,0 +1,73 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<!-- <head>
+  <style>
+  a.restore:link {color:#00C83A;}
+  a.restore:visited {color:#00C83A;text-decoration:none;}
+  a.restore:hover {text-decoration:underline;}
+  </style>
+  </head>
+   -->  
+   <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-flash alert-{{ category }} alert-dismissible" role="alert" style="margin-top: 10px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <!-- <strong>Title</strong> --> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+          <h2 class="pull-left">Archived Company List</h2>
+          <br>
+        </div>
+        <!-- /.box-header -->
+        {% if companies != "" %}
+        {% if companies|count > 0 %}
+        <div class="box-body">
+          <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th>DATE CREATED</th>
+                <th>ID</th>
+                <th>COMPANY</th>
+                <th class="text-right">ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for company in companies %}
+              <tr>
+                <td>{{ company.created_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ company.id }}</td>
+                <td>{{ company.name }}</td>
+                <td>
+                  <div class="action-buttons text-right">
+                      <a class="restore" href="{{ url_for('.restore_company', company_id=company.id) }}"><i class="ace-icon fa fa-refresh bigger-140"></i></a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {% if companies|count == 0 %}
+          <h3 class="text-center alert alert-info">No Record(s) Found!</h3>
+          {% endif %}
+        {% endif %}
+        {% endif %}
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="alert alert-success hide" id="message-j"></div>
+          <h2 class="pull-left">Support Ticket Requests</h2>
+        </div>
+
+        <div class="box-body">
+          <table id="TicketsDataTable" class="table table-striped table-bordered" cellspacing="0" width="100%"></table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+
+  <div name="Tickets" path="Tickets/Tickets" class="modal fade DataTableModal modal-lg" role="dialog" style="display: none; width: 1000px; ">
+  	<div class="modal-dialog modal-lg">
+  		<div class="modal-content">
+  			<div class="modal-header customhdr">
+  				<button type="button" class="close"  data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+  				<h4 class="modal-title"><span></span> Tickets</h4>
+  			</div>
+  			<div class="modal-body">
+          <div class="row">
+              <div class="col-md-7">
+                <input name="iTicketId" type="hidden">
+                <div class="form-group">
+                  <div class="col-sm-6">
+                    <label class="control-label"><i class="fa"></i>Status</label>
+                    <select name="iStatus" class="form-control select2 fa" style="width:100%">
+                        <option value="">--SELECT OPTION--</option>
+                      <option value="1">ACCEPT</option>
+                      <option value="2">CLOSE</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-6">
+                      <label class="control-label"><i class="fa"></i> Ticket #</label>
+                      <input name="sReference" disabled  class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="control-label"><i class="fa"></i> Issuer</label>
+                      <input name="sFullName" disabled class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-12">
+                      <label class="control-label"><i class="fa"></i>Subject</label>
+                      <input name="sSubject" disabled  class="form-control" type="text">
+                  </div>
+                  <div class="col-sm-12">
+                      <label class="control-label"><i class="fa"></i>Description</label>
+                      <textarea name="sDescription" disabled  class="form-control" type="text"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label"><i class="fa"></i>Solutions</label>
+                      <textarea name="sSolutions" rows="5"  class="form-control" type="text"></textarea>
+                  </div>
+                </div>
+
+                <div class="row">
+
+                  <div class="col-md-12" style="margin-top:20px;">
+                      <hr>
+            				<button action="cancel" type="button" class="btn btn-default full-right" data-dismiss="modal">Cancel</button>
+            				<button action="save" type="button" class="btn btn-primary full-right">Save Changes</button>
+            			</div>
+                </div>
+
+              </div>
+              <div class="col-md-5">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Chat Message</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <div class="direct-chat-messages"></div>
+                      <div class="box-footer">
+                        <form action="#" method="post">
+                          <div class="input-group">
+                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                            <span class="input-group-btn">
+                              <a onkeypress="return aModules.oChat.keyPress(event);" id="sendBtn" href="javascript:aModules.oChat.send()"  class="btn btn-warning btn-flat">Send</a>
+                            </span>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+              </div>
+          </div>
+        </div>
+
+  		</div>
+
+  	</div>
+  </div>
+
+{% endblock %}
+{% endblock %}

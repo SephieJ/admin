@@ -1,0 +1,214 @@
+.category {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #EFB509;
+    border-radius: 5px;
+    padding: 3px;
+}
+.subcategory {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #CD7213;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+/*HREF Buttons*/
+a.edit:link {
+    color: #FFC300;
+}
+a.edit:visited {
+    color: #FFC300;
+    text-decoration: none;
+}
+a.edit:hover {
+    text-decoration: underline;
+}
+a.edit:hover i {
+    transform: scale(2);
+}
+a.view:link {
+    color: #0776EB;
+    text-decoration: none;
+}
+a.view:visited {
+    color: #0776EB;
+    text-decoration: none;
+}
+a.view:hover {
+    text-decoration: underline;
+}
+a.view:hover i {
+    transform: scale(2);
+}
+a.delete:link {
+    color: #EB0707;
+}
+a.delete:visited {
+    color: #EB0707;
+    text-decoration: none;
+}
+a.delete:hover {
+    text-decoration: underline;
+}
+a.delete:hover i {
+    transform: scale(2);
+}
+a.restore:link {
+    color: #00C83A;
+}
+a.restore:visited {
+    color: #00C83A;
+    text-decoration: none;
+}
+a.restore:hover {
+    text-decoration: underline;
+}
+a.restore:hover i {
+    transform: scale(2);
+}
+
+a.accept.link {
+    color: #41A317;
+}
+a.accept:visited {
+    color: #41A317;
+    text-decoration: none;
+}
+a.accept:hover {
+    text-decoration: underline;
+}
+a.accept:hover i {
+    transform: scale(2);
+}
+
+a.reject:hover {
+    text-decoration: underline;
+}
+a.reject:hover i {
+  transform: scale(2);
+}
+a.reject:visited {
+    color: #EB0707;
+    text-decoration: none;
+}
+a.reject:link {
+  color: #EB0707;
+}
+/*
+a.reject:active {
+  color: #B6B6B4;
+}
+*/
+
+/*Categories Enlarge Images*/
+div.enlarge{
+list-style-type:none;
+margin-left:0px;
+}
+div.enlarge img{
+background-color:#FFFFFF;
+position: relative;
+-webkit-box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+-moz-box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+div.enlarge span{
+position:absolute;
+left: -9999px;
+background-color:#069AFA;
+padding: 7px;
+font-family: 'Droid Sans', sans-serif;
+font-size: 20;
+text-align: center;
+color: #FFFFFF;
+-webkit-box-shadow: 0 0 20px rgba(0,0,0, .75));
+-moz-box-shadow: 0 0 20px rgba(0,0,0, .75);
+box-shadow: 0 0 20px rgba(0,0,0, .75);
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
+border-radius:8px;
+}
+div.enlarge a:hover{
+z-index: 50;
+cursor:pointer;
+}
+div.enlarge span img{
+padding:2px;
+background:#ccc;
+width: 500px;
+height: 350px;
+}
+div.enlarge a:hover span{
+top: -185px; /*the distance from the top of the thumbnail to the bottom of the popup image*/
+left: 350px; /*distance from the right of the thumbnail to the right of the popup image*/
+}
+div.enlarge a:hover:nth-child(2) span{
+left: -100px;
+}
+div.enlarge a:hover:nth-child(3) span{
+left: -200px;
+}
+/**IE Hacks - see http://css3pie.com/ for more info on how to use CS3Pie and to download the latest version**/
+div.enlarge img, div.enlarge span{
+behavior: url(pie/PIE.htc);
+}
+/**/
+/*span.category {
+    background-color: #344D90;
+    font-weight: bold;
+    font-size: 10;
+}*/
+.activated, .accepted {
+    color: #00BE4B;
+    font-weight: bold;
+    font-size: 100%;
+}
+.banned, .closed {
+    color: #E30000;
+    font-weight: bold;
+    font-size: 100%;
+}
+.unverified {
+    color: #005DFF;
+    font-weight: bold;
+    font-size: 100%;
+}
+.deactivated {
+    color: #FF9B00;
+    font-weight: bold;
+    font-size: 100%;
+}
+.pending {
+    color: #FF9B00;
+    font-weight: bold;
+    font-size: 100%;
+}
+/* suggested categories */
+.rejected {
+    color: #E30000;
+    font-weight: bold;
+    font-size: 100%;
+}
+
+/*end of suggested categories*/
+
+/* categories */
+.box-header {
+  padding-bottom: ;
+}
+
+/* dashboard user */
+.user-info{
+    margin-left: 60px;
+}
+
+/* dashboard images */
+.profile-user-img {
+    height: 100px;
+}

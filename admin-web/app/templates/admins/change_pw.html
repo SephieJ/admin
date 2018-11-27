@@ -1,0 +1,74 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="box-header">
+          <h2 class="pull-left">Edit Password</h2>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form id="new-account-form" method="POST" class="form-horizontal"  files=true enctype="multipart/form-data" data-disable="false">
+                {{ change_password_form.csrf_token }}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ change_password_form.old_password.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ change_password_form.old_password(class="form-control", placeholder="Current Password", value=password.old_password) }}
+                            <div class="help-block with-errors"></div>
+                               {% if change_password_form.old_password.errors %}
+                                    {% for error in change_password_form.old_password.errors %}
+                                        <span class="error text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ change_password_form.new_password.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{ change_password_form.new_password(class="form-control", placeholder="New Password", value=password.new_password) }}
+                            <div class="help-block with-errors"></div>
+                                {% if change_password_form.new_password.errors %}
+                                    {% for error in change_password_form.new_password.errors %}
+                                        <span class="error text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {{ change_password_form.confirm_password.label (class="control-labels no-padding-right col-sm-2") }}
+                        <div class="col-sm-5">
+                            {{change_password_form.confirm_password(class="form-control", placeholder="Confirm Password", value=password.confirm_password) }}
+                            <div class="help-block with-errors"></div>
+                                {% if change_password_form.confirm_password.errors %}
+                                    {% for error in change_password_form.confirm_password.errors %}
+                                        <span class="error text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 well well-sm">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ url_for ('.admin_page') }}" class="btn btn-inverse pull-right" id="btn_reset"><i class="fa fa-hand-o-left" aria-hidden="true"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}

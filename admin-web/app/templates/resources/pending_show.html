@@ -1,0 +1,215 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+  <div class="nav-tabs-custom">
+    <div class="tab-content primary">
+      <div class="active tab-pane primary" id="activity">
+        <!-- Post -->
+
+        <div class="post">
+                <span class="username">
+                <h3> {{ resource.name }} </h3>
+                {% if resource.status == 'BANNED' %}
+                <span class="label label-danger text-center">BANNED</span>
+                {% endif %}
+                </span>
+        </div>
+
+          <div class="row margin-bottom">
+            <div class="col-sm-6">
+              <div class="box-body">
+              <form id="userForm" method="POST" class="form-horizontal">
+                {{ resource_form.csrf_token }}
+                <strong><i class="fa fa-calendar-check-o margin-r-5"></i> Date Posted</strong>
+
+                <p class="text-muted">
+                    {{ resource.created_date.strftime('%Y-%m-%d') }}
+                </p>
+                <hr>
+
+                <strong><i class="fa fa-address-card margin-r-5"></i> Posted By</strong>
+                <p class="text-muted">
+                    {{ resource.account['first_name'] }} {{ resource.account['last_name'] }}
+                    &nbsp;
+                    {% if resource.account['status'] == 'ACTIVATED' %}
+                      <span class="label label-success text-center">ACTIVE</span>
+                      {% elif resource.account['status'] == 'BANNED' %}
+                      <span class="label label-danger text-center">BANNED</span>
+                      {% elif resource.account['status'] == 'DEACTIVATED' %}
+                      <span class="label label-warning text-center">DEACTIVATED</span>
+                    {% endif %}
+                </p>
+                <p class="text-muted">{{ resource.account['email']}}</p>
+                {% if resource.account['mobile_number'] or resource.account['landline_number'] %}
+                <p class="text-muted">{{ resource.account['mobile_number'] }}</p>
+                <p class="text-muted">{{ resource.account['landline_number'] }}</p>
+                {% else %}
+                <p class="text-muted">*No contact number found.</p>
+                {% endif %}
+                <hr>
+
+
+                {% if resource.location %}
+                  <strong><i class="fa fa-map-marker"></i> Location</strong>
+                  <p class="text-muted">
+                     {{ resource.location['city'] }}
+                     {{ resource.location['id'] }}
+                     {{ resource.location['latitude'] }}
+                     {{ resource.location['longitude'] }}
+                     {{ resource.location['state'] }}
+                     {{ resource.location['street'] }}
+                     {{ resource.location['zipcode'] }}
+                  </p>
+
+                {% else %}
+
+                  <strong><i class="fa fa-map-marker"></i> Location</strong>
+                  <p class="text-muted">
+                     N.A
+                  </p>
+
+                {% endif %}
+
+                <strong><i class="fa fa-money margin-r-5"></i> Price</strong>
+                <p class="text-muted">
+                    S$ {{ resource.price }}
+                </p>
+
+                <strong><i class="fa fa-clock-o margin-r-5"></i> Rate</strong>
+                <p class="text-muted">
+                    Per {{ resource.resource_rate }}
+                </p>
+                <hr>
+
+                {% if resource.status == 'PENDING'  %}
+                    {% if resource.categories %}
+                      <button class="btn btn-success" formaction="{{ url_for('.accept_resource', resource_id=resource.id) }}"><i class="ace-icon fa fa fa-check-square bigger-140"></i> ACCEPT</a></button>&nbsp;&nbsp;&nbsp;
+                    {% else %}
+                      <button class="btn btn-success" name="confirm"><i class="ace-icon fa fa fa-check-square bigger-140"></i> ACCEPT</a></button>&nbsp;&nbsp;&nbsp;
+                    {% endif %}
+                    <button class="btn btn-danger" formaction="{{ url_for('.reject_resource', resource_id=resource.id) }}"><i class="ace-icon fa fa fa-times-rectangle bigger-140"></i> REJECT</a></button>
+
+                {% elif resource.status == 'ACTIVE' %}
+                    <button type="submit" id="ban" name="submit" value="ban" formaction="{{ url_for('.delete_resource', resource_id=resource.id) }}" class="btn btn-m btn-danger"><b>BAN RESOURCE</b></button>&nbsp;&nbsp;&nbsp;
+                {% endif %}
+
+                  <a class="btn btn-default" href="{{ url_for('.pending_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i> Back to List</a>
+
+              </form>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="row">
+
+                {% for image in resource.images %}
+
+                  <div class= "col-sm-3">
+                    <ul class="products-list product-list-in-box">
+                      <li class="item">
+                        {% if resource.images %}
+                          <img src="{{ image.image }}" alt="Product Image" height = "150" width="150">
+                        {% else %}
+                          <img src="{{ url_for('static', filename='uploads/no-image.png') }}" alt="Product Image" height="150" width="150">
+                        {% endif%}
+                      </li>
+                    </ul>
+                  </div>
+
+                {% endfor %}
+
+             </div>
+            </div>
+
+            <br>
+
+            <div class= "col=sm-6">
+              <strong><i class="fa fa-info-circle margin-r-5"></i> Description</strong>
+              <p class="text-muted">
+                {{ resource.description }}
+              </p>
+
+              <strong><i class="fa fa-object-group margin-r-5"></i> Category / Subcategory</strong>
+              <br>
+               {% for category in resource.categories %}
+                 <p>
+                 <span class="category text-center">{{ category.main_category_name }}</span>
+                 <span class="subcategory text-center">{{ category.subcategory['name'] }}</span>
+                 </p>
+               {% endfor %}
+
+              <br>
+               <strong><i class="fa fa-wordpress margin-r-5"></i> KEYWORDS:</strong>
+               <br>
+                {% for category in resource.categories %}
+                <p>
+                  <input id="keywords" value="{{ category.keywords }}" />
+                  <!-- <span class="category text-center">{{ category.keywords }}</span> -->
+                </p>
+                {% endfor %}
+
+            </div>
+         
+    </div>
+  </div>
+</div>
+{% endblock %}
+<!--Modal Confirm-->
+<div name="PromptResource" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+     <div class="form-horizontal modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+        <h4 class="modal-title">Opps!</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-12" >
+              <p>Categories/Subcategory are needed for acceptance</p>
+              <ul name="cat_needed">
+
+              </ul>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer customdlft">
+      <div>
+        <button name="Cancel" type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+        </form>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+  $("button[name='confirm']").click(function(e){
+
+    e.preventDefault();
+    var suggested_subcategory = {{ resource.suggested_subcategory|tojson }};
+    var suggested_main_category = {{ resource.suggested_main_category|tojson }};
+
+    //console.log(suggested_subcategory);
+    //console.log(suggested_subcategory);
+
+    var temp = '';
+    $.each(suggested_main_category , function(i,v){
+      temp+= '<li>';
+      temp+=  '<a target="_blank" href="'+sUrl+'/suggested-categories/'+v.id+'">'+v.name+'</a>';
+        temp+= '<ol>';
+          $.each(suggested_subcategory , function(i,v){
+              temp+=   '<li>'+v.name+'</li>';
+          });
+        temp+=  '</ol>';
+      temp+=   '</li>';
+    });
+     $("ul[name='cat_needed']").empty().html(temp);
+
+    $("div[name='PromptResource']").modal('show');
+
+    // var temp = "<li> <a href='#'> Category</a> </li>";
+    //
+
+  });
+</script>
+{% endblock %}

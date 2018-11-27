@@ -1,0 +1,212 @@
+{% extends "layouts/master_layout.html" %}
+{% block content %}
+{% block body %}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-header">
+            <div class="alert alert-success hide" id="message-j"></div>
+            <h2 class="pull-left">{{ company.name }}</h2>
+            <br>
+            <div class="action-buttons pull-right">
+                <a class="btn btn-warning" href="{{ url_for('.edit_company_page', company_id=company.id) }}"><i class="ace-icon fa fa fa-pencil-square bigger-140"></i> EDIT COMPANY</a>&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-danger" href="{{ url_for('.delete_company', company_id=company.id) }}"><i class="ace-icon fa fa fa-archive bigger-140"></i> DELETE COMPANY</a>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    <div id="page_content_body_display">
+        <div class="text-left">
+            <form class="form-horizontal form">
+            
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="date-added" class="col-sm-2  no-padding-right control-labels">Date Created:</label>
+                            <div class="col-sm-5">
+                                <label id="date-added">{{ company.created_date.strftime('%d-%m-%Y') }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="user-id" class="col-sm-2  no-padding-right control-labels">ID:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.id }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2  no-padding-right control-labels">Company Name:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.name }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2  no-padding-right control-labels">Information:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.company_info }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                 <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="business_reg_number" class="col-sm-2  no-padding-right control-labels">Business Reg Number:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.business_reg_number }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                  <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="office_number" class="col-sm-2  no-padding-right control-labels">Office Number:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.office_number }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="mobile_number" class="col-sm-2  no-padding-right control-labels">Mobile Number:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.mobile_number }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="accreditations" class="col-sm-2  no-padding-right control-labels">Accreditations:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.accreditations[0] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-labels no-padding-right col-sm-2"><i> Company Address</i></label>
+                    </div>
+                </div>
+
+                {% if company.address %}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="latitude" class="col-sm-2  no-padding-right control-labels">Latitude:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.address['latitude'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="longitude" class="col-sm-2  no-padding-right control-labels">Longitude:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.address['longitude'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="block_street" class="col-sm-2  no-padding-right control-labels">Block Street:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.address['block_street'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Unit Number" class="col-sm-2  no-padding-right control-labels">Unit Number:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.address['unit_number'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="postal_code" class="col-sm-2  no-padding-right control-labels">Postal Code:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">{{ company.address['postal_code'] }}</label>
+                            </div>
+                    </div>
+                </div>
+
+                {% else %}
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="latitude" class="col-sm-2  no-padding-right control-labels">Latitude:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">N.A.</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="longitude" class="col-sm-2  no-padding-right control-labels">Longitude:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">N.A.</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="block_street" class="col-sm-2  no-padding-right control-labels">Block Street:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">N.A.</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Unit Number" class="col-sm-2  no-padding-right control-labels">Unit Number:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">N.A.</label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="postal_code" class="col-sm-2  no-padding-right control-labels">Postal Code:</label>
+                            <div class="col-sm-5">
+                                <label id="user-id">N.A.</label>
+                            </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="pull-left">
+                        <a class="btn btn-default" href="{{ url_for('.company_page') }}" id="btnDefault"><i class="fa fa-arrow-left bigger-100"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+{% endblock %}
+{% endblock %}
+
